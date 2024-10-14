@@ -18,6 +18,9 @@ public interface CommonTreeInterface<T> {
 
     void deleteByMerging(T data);
     void deleteByCopying(T data);
+    // New method for searching purposes
+    TreeNode<T> searchByCode(String code); // Search by course or student code
+    TreeNode<T> searchByName(String name);
 
     void toInOrderArray(ArrayList<T> array, TreeNode<T> start);
     void balance(ArrayList<T> data, int start, int end);
