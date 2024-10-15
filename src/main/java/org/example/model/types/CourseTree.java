@@ -1,13 +1,12 @@
 package org.example.model.types;
 
-import com.sun.org.glassfish.external.statistics.CountStatistic;
 import org.example.model.binaryTree.CommonTreeInterface;
 import org.example.model.binaryTree.TreeNode;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class CourseList extends TreeNode<Course> implements CommonTreeInterface<Course> {
+public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
 
     // Task for Vinh: Implement methods from here up to `deleteByCopying`
@@ -36,21 +35,64 @@ public class CourseList extends TreeNode<Course> implements CommonTreeInterface<
     @Override
     public void insert(Course value) {
         // TODO: Implement inserting a course into the tree
+        TreeNode<Course> newNode = new TreeNode<>(value);
+        if (isEmpty()){
+            root = newNode;
+            return;
+        }
+        TreeNode<Course> current = root;
+        TreeNode<Course> parent = null;
+        while(current != null){
+            parent = current;
+            if(value.getCcode().equals(current.data.getCcode())){
+                System.out.println("The course is already in the list.");
+                return;
+            }
+            if(value.getCcode().compareTo(current.data.getCcode()) < 0){
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        if(value.getCcode().compareTo(parent.data.getCcode()) < 0){
+            parent.left = newNode;
+        } else{
+            parent.right = newNode;
+        }
+
     }
 
     @Override
     public void preOrder(TreeNode<Course> node) {
         // TODO: Implement pre-order traversal of the tree
+        if(node == null){
+            return;
+        }
+        display(node);
+        preOrder(node.left);
+        preOrder(node.right);
     }
 
     @Override
     public void inOrder(TreeNode<Course> node) {
         // TODO: Implement in-order traversal of the tree
+        if(node == null) {
+            return;
+        }
+        preOrder(node.left);
+        display(node);
+        preOrder(node.right);
     }
 
     @Override
     public void postOrder(TreeNode<Course> node) {
         // TODO: Implement post-order traversal of the tree
+        if(node == null) {
+            return;
+        }
+        preOrder(node.left);
+        preOrder(node.right);
+        display(node);
     }
 
     @Override
@@ -100,8 +142,9 @@ public class CourseList extends TreeNode<Course> implements CommonTreeInterface<
     }
 
     @Override
-    public void display() {
+    public void display(TreeNode<Course> node) {
         // TODO: Implement displaying the tree structure
+        System.out.println(node.data);
     }
 
     @Override

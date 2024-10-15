@@ -26,7 +26,7 @@ public interface CommonTreeInterface<T> {
     void balance(ArrayList<T> data, int start, int end);
     void balance();
 
-    void display();
+    void display(TreeNode<T> node);
     void load(File file);
     void save(File file);
 }
