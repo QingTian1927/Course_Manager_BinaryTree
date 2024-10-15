@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
 
-    // Task for Vinh: Implement methods from here up to `deleteByCopying`
     @Override
     public void load(File file) {
         // TODO: Implement loading courses from a file
@@ -45,11 +44,14 @@ public class CourseTree implements CommonTreeInterface<Course> {
         TreeNode<Course> parent = null;
 
         while(current != null){
+
             parent = current;
+
             if(value.getCcode().equals(current.data.getCcode())){
                 System.out.println("The course is already in the list.");
                 return;
             }
+
             if(value.getCcode().compareTo(current.data.getCcode()) < 0){
                 current = current.left;
             } else {
@@ -62,6 +64,8 @@ public class CourseTree implements CommonTreeInterface<Course> {
         } else{
             parent.right = newNode;
         }
+
+        System.out.println("Add course successfully.");
     }
 
     @Override
@@ -99,15 +103,18 @@ public class CourseTree implements CommonTreeInterface<Course> {
         TreeNode<Course> current = root;
 
         while(current != null){
+
             if(value.getCcode().equals(current.data.getCcode())){
                 return current;
             }
+
             if(value.getCcode().compareTo(current.data.getCcode()) < 0){
                 current = current.left;
             } else {
                 current = current.right;
             }
         }
+
         return null;
     }
 
@@ -180,6 +187,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
         if(isEmpty()){
             return null;
         }
+
         if (value.getCcode().compareTo(root.data.getCcode()) < 0) {
             // The value to delete is less, search in the left subtree
             root.left = deleteByMergingRecursive(root.left, value);
@@ -203,6 +211,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             maxNode.right = node.right;
             return subRoot;
         }
+
         return node;
 
     }
@@ -212,6 +221,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
         if(isEmpty()){
             return null;
         }
+
         if (value.getCcode().compareTo(root.data.getCcode()) < 0) {
             // The value to delete is less, search in the left subtree
             root.left = deleteByMergingRecursive(root.left, value);
@@ -235,19 +245,16 @@ public class CourseTree implements CommonTreeInterface<Course> {
             node.data = maxNode.data;
             node.left = deleteByCopyingRecursive(node.left, maxNode.data);
         }
+
         return node;
 
     }
-
 
     @Override
     public void deleteByCopying(Course data) {
         // TODO: Implement deletion by copying
     }
-    // End of Task for Vinh
 
-
-    // Task for CEO: Implement methods from here to the end
     @Override
     public void deleteByMerging(Course data) {
         // TODO: Implement deletion by merging
@@ -257,34 +264,91 @@ public class CourseTree implements CommonTreeInterface<Course> {
     @Override
     public void toInOrderArray(ArrayList<Course> array, TreeNode<Course> start) {
         // TODO: Convert the tree to an in-order array
+        if(start == null){
+            return;
+        }
+        toInOrderArray(array, start.left);
+        array.add(start.data);
+        toInOrderArray(array, start.right);
     }
 
     @Override
     public void balance(ArrayList<Course> data, int start, int end) {
-        //TODO: Balancing data using from array
+        if (start > end){
+            return;
+        }
+        int mid = (start + end) / 2;
+        insert(data.get(mid));
+        balance(data, start, mid - 1);
+        balance(data, mid + 1, end);
     }
 
     @Override
     public void balance() {
-        //TODO: Implementing balance tree
+        if (isEmpty()){
+            return;
+        }
+        ArrayList<Course> courseList = new ArrayList<>();
+        toInOrderArray(courseList, root);
+        clear();
+        balance(courseList, 0, courseList.size()-1);
+
     }
 
     @Override
     public void display(TreeNode<Course> node) {
-        // TODO: Implement displaying the tree structure
         System.out.println(node.data);
     }
 
     @Override
     public TreeNode<Course> searchByCode(String code){
-        // TODO: Search with course code
-        return null;
+        if(isEmpty()){
+            return null;
+        }
+
+        Course tempCourse = new Course();
+        tempCourse.setCcode(code);
+        TreeNode<Course> foundCourse = get(tempCourse);
+
+        if(foundCourse != null){
+            System.out.println("Course Found: " + foundCourse.data);
+            return foundCourse;
+        } else{
+            System.out.println("Course not found.");
+            return null;
+        }
     }
 
     @Override
-    public TreeNode<Course> searchByName(String name){
-        //TODO: Search with name
-        return null;
+    public CourseTree searchByName(String name){
+        if(isEmpty()){
+            return null;
+        }
+
+        CourseTree newTree = new CourseTree();
+
+        CommonQueue<TreeNode<Course>> queue = new CommonQueue<>();
+        queue.enqueue(root);
+
+        while(!queue.isEmpty()){
+
+            TreeNode<Course> current = queue.dequeue();
+
+            if(current.data.getSname().contains(name)){
+                newTree.insert(current.data);
+            }
+
+            if (current.left != null) {
+                queue.enqueue(current.left);
+            }
+            if (current.right != null) {
+                queue.enqueue(current.right);
+            }
+        }
+
+        newTree.breadth();
+        return newTree;
+
     }
 
     @Override

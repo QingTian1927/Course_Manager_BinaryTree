@@ -1,5 +1,7 @@
 package org.example.model.binaryTree;
 
+import org.example.model.types.CourseTree;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -20,7 +22,7 @@ public interface CommonTreeInterface<T> {
     void deleteByCopying(T data);
     // New method for searching purposes
     TreeNode<T> searchByCode(String code); // Search by course or student code
-    TreeNode<T> searchByName(String name);
+    CourseTree searchByName(String name);
 
 
     void toInOrderArray(ArrayList<T> array, TreeNode<T> start);
