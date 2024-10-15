@@ -95,6 +95,49 @@ public class CourseTree implements CommonTreeInterface<Course> {
     }
 
     @Override
+    public TreeNode<Course> get(Course value) {
+        TreeNode<Course> current = root;
+
+        while(current != null){
+            if(value.getCcode().equals(current.data.getCcode())){
+                return current;
+            }
+            if(value.getCcode().compareTo(current.data.getCcode()) < 0){
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public TreeNode<Course> getParent(TreeNode<Course> node) {
+        if (node == null || node == root) {
+            return null;
+        }
+
+        TreeNode<Course> current = root;
+        TreeNode<Course> parent = null;
+
+        while (current != null) {
+            if (node.data.getCcode().equals(current.data.getCcode())) {
+                return parent;
+            }
+
+            parent = current;
+
+            if (node.data.getCcode().compareTo(current.data.getCcode()) < 0) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public void breadth() {
         if(root == null){
             return;
@@ -117,17 +160,85 @@ public class CourseTree implements CommonTreeInterface<Course> {
         }
     }
 
-    @Override
-    public TreeNode<Course> get(Course data) {
-        // TODO: Implement searching for a course in the tree
-        return null;
+    public TreeNode<Course> findMaxNode(TreeNode<Course> node){
+        while(node.right != null){
+            node = node.right;
+        }
+        return node;
     }
 
-    @Override
-    public TreeNode<Course> getParent(TreeNode<Course> node) {
-        // TODO: Implement finding the parent of a given node
-        return null;
+
+    public TreeNode<Course> findMinNode(TreeNode<Course> node){
+        while(node.left != null){
+            node = node.left;
+        }
+        return node;
     }
+
+
+    public TreeNode<Course> deleteByMergingRecursive(TreeNode<Course> node, Course value){
+        if(isEmpty()){
+            return null;
+        }
+        if (value.getCcode().compareTo(root.data.getCcode()) < 0) {
+            // The value to delete is less, search in the left subtree
+            root.left = deleteByMergingRecursive(root.left, value);
+        } else if (value.getCcode().compareTo(root.data.getCcode()) > 0) {
+            // The value to delete is greater, search in the right subtree
+            root.right = deleteByMergingRecursive(root.right, value);
+        } else {
+            // The value is found, we consider 3 possible ways
+            if(node.left == null) return node.right; //Tree has only one right child
+            if(node.right == null) return node.left; //Tree has only one left child
+
+            /*
+            Tree has both two child:
+            + Step 1: We find the highest value on the left child
+            + Step 2: We link this left child to the right child of the node that we want to delete
+            + Step 3: Return newsubRoot to link to the parent of the original node.
+            */
+
+            TreeNode<Course> subRoot = node.left;
+            TreeNode<Course> maxNode = findMaxNode(subRoot);
+            maxNode.right = node.right;
+            return subRoot;
+        }
+        return node;
+
+    }
+
+
+    public TreeNode<Course> deleteByCopyingRecursive(TreeNode<Course> node, Course value) {
+        if(isEmpty()){
+            return null;
+        }
+        if (value.getCcode().compareTo(root.data.getCcode()) < 0) {
+            // The value to delete is less, search in the left subtree
+            root.left = deleteByMergingRecursive(root.left, value);
+        } else if (value.getCcode().compareTo(root.data.getCcode()) > 0) {
+            // The value to delete is greater, search in the right subtree
+            root.right = deleteByMergingRecursive(root.right, value);
+        } else {
+            // The value is found, we consider 3 possible ways
+            if(node.left == null) return node.right; //Tree has only one right child
+            if(node.right == null) return node.left; //Tree has only one left child
+
+            /*
+            Tree has both two child:
+            + Step 1: We find the highest value on the left child
+            + Step 2: We copy the data of the highest node we just found to the node we want to delete
+            + Step 3: We delete the position of the node we just copy
+            */
+
+            TreeNode<Course> subRoot = node.left;
+            TreeNode<Course> maxNode = findMaxNode(subRoot);
+            node.data = maxNode.data;
+            node.left = deleteByCopyingRecursive(node.left, maxNode.data);
+        }
+        return node;
+
+    }
+
 
     @Override
     public void deleteByCopying(Course data) {

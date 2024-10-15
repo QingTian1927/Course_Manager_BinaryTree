@@ -14,5 +14,6 @@ public class CommonQueue<T> {
 
     public T dequeue(){
 
+        return null;
     }
 }
