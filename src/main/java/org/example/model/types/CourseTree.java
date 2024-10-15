@@ -4,7 +4,8 @@ import org.example.model.binaryTree.CommonTreeInterface;
 import org.example.model.binaryTree.TreeNode;
 
 import java.io.File;
-
+import java.util.ArrayList;
+import java.util.Queue;
 
 
 public class CourseTree implements CommonTreeInterface<Course> {
@@ -23,19 +24,16 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void clear() {
-        // TODO: Implement clearing the tree
         root = null;
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO: Implement checking if the tree is empty
         return root == null;
     }
 
     @Override
     public void insert(Course value) {
-        // TODO: Implement inserting a course into the tree
         TreeNode<Course> newNode = new TreeNode<>(value);
 
         if (isEmpty()){
@@ -68,7 +66,6 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void preOrder(TreeNode<Course> node) {
-        // TODO: Implement pre-order traversal of the tree
         if(node == null){
             return;
         }
@@ -79,7 +76,6 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void inOrder(TreeNode<Course> node) {
-        // TODO: Implement in-order traversal of the tree
         if(node == null) {
             return;
         }
@@ -90,7 +86,6 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void postOrder(TreeNode<Course> node) {
-        // TODO: Implement post-order traversal of the tree
         if(node == null) {
             return;
         }
@@ -101,11 +96,25 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void breadth() {
-        // TODO: Implement breadth-first traversal of the tree
         if(root == null){
             return;
         }
 
+        CommonQueue<TreeNode<Course>> queue = new CommonQueue<>();
+        queue.enqueue(root);
+
+        while(!queue.isEmpty()){
+            TreeNode<Course> current = root;
+            display(current);
+
+            if(current.left != null){
+                queue.enqueue(current.left);
+            }
+            
+            if(current.right != null){
+                queue.enqueue(current.right);
+            }
+        }
     }
 
     @Override
@@ -164,6 +173,11 @@ public class CourseTree implements CommonTreeInterface<Course> {
     @Override
     public TreeNode<Course> searchByName(String name){
         //TODO: Search with name
+        return null;
+    }
+
+    @Override
+    public String toPreorderString() {
         return null;
     }
 
