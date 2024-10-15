@@ -5,6 +5,7 @@ import org.example.model.binaryTree.TreeNode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Queue;
 
 public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
@@ -36,12 +37,15 @@ public class CourseTree implements CommonTreeInterface<Course> {
     public void insert(Course value) {
         // TODO: Implement inserting a course into the tree
         TreeNode<Course> newNode = new TreeNode<>(value);
+
         if (isEmpty()){
             root = newNode;
             return;
         }
+
         TreeNode<Course> current = root;
         TreeNode<Course> parent = null;
+
         while(current != null){
             parent = current;
             if(value.getCcode().equals(current.data.getCcode())){
@@ -54,12 +58,12 @@ public class CourseTree implements CommonTreeInterface<Course> {
                 current = current.right;
             }
         }
+
         if(value.getCcode().compareTo(parent.data.getCcode()) < 0){
             parent.left = newNode;
         } else{
             parent.right = newNode;
         }
-
     }
 
     @Override
@@ -98,6 +102,10 @@ public class CourseTree implements CommonTreeInterface<Course> {
     @Override
     public void breadth() {
         // TODO: Implement breadth-first traversal of the tree
+        if(root == null){
+            return;
+        }
+
     }
 
     @Override
