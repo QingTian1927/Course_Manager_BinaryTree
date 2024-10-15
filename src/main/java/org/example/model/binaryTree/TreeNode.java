@@ -1,11 +1,12 @@
 package org.example.model.binaryTree;
 
 import org.example.io.DataWriter;
+import org.example.model.types.Course;
 
 public class TreeNode<T> {
     public T data;
-    protected TreeNode<T> left;
-    protected TreeNode<T> right;
+    public TreeNode<T> left;
+    public TreeNode<T> right;
 
     public TreeNode() {}
 
