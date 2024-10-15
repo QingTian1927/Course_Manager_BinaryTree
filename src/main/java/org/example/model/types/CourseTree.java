@@ -315,15 +315,17 @@ public class CourseTree implements CommonTreeInterface<Course> {
             return foundCourse;
         } else{
             System.out.println("Course not found.");
-            return  null;
+            return null;
         }
     }
 
     @Override
-    public TreeNode<Course> searchByName(String name){
+    public CourseTree searchByName(String name){
         if(isEmpty()){
             return null;
         }
+
+        CourseTree newTree = new CourseTree();
 
         CommonQueue<TreeNode<Course>> queue = new CommonQueue<>();
         queue.enqueue(root);
@@ -333,8 +335,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             TreeNode<Course> current = queue.dequeue();
 
             if(current.data.getSname().contains(name)){
-                System.out.println("Subject Name found: " + current.data);
-                return current;
+                newTree.insert(current.data);
             }
 
             if (current.left != null) {
@@ -345,8 +346,9 @@ public class CourseTree implements CommonTreeInterface<Course> {
             }
         }
 
-        System.out.println("Subject Name not found.");
-        return null;
+        newTree.breadth();
+        return newTree;
+
     }
 
     @Override
