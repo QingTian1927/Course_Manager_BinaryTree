@@ -5,7 +5,7 @@ import org.example.model.binaryTree.TreeNode;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Queue;
+
 
 public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
