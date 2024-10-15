@@ -2,6 +2,7 @@ package org.example.model.types;
 
 import org.example.model.binaryTree.CommonTreeInterface;
 import org.example.model.binaryTree.TreeNode;
+import org.example.model.linkedList.CommonQueue;
 
 import java.io.File;
 import java.util.ArrayList;

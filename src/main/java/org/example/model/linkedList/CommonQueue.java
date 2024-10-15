@@ -1,6 +1,4 @@
-package org.example.model.types;
-
-import org.example.model.linkedList.ListNode;
+package org.example.model.linkedList;
 
 public class CommonQueue<T> {
     private ListNode<T> head;
