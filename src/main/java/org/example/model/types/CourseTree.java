@@ -104,13 +104,13 @@ public class CourseTree implements CommonTreeInterface<Course> {
         queue.enqueue(root);
 
         while(!queue.isEmpty()){
-            TreeNode<Course> current = root;
+            TreeNode<Course> current = queue.dequeue();
             display(current);
 
             if(current.left != null){
                 queue.enqueue(current.left);
             }
-            
+
             if(current.right != null){
                 queue.enqueue(current.right);
             }

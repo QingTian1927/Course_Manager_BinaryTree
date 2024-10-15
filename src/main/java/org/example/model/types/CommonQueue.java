@@ -14,7 +14,7 @@ public class CommonQueue<T> {
 
     }
 
-    public void dequeue(T value){
+    public T dequeue(){
 
     }
 }
