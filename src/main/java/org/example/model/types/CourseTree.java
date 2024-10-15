@@ -95,6 +95,49 @@ public class CourseTree implements CommonTreeInterface<Course> {
     }
 
     @Override
+    public TreeNode<Course> get(Course value) {
+        TreeNode<Course> current = root;
+
+        while(current != null){
+            if(value.getCcode().equals(current.data.getCcode())){
+                return current;
+            }
+            if(value.getCcode().compareTo(current.data.getCcode()) < 0){
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public TreeNode<Course> getParent(TreeNode<Course> node) {
+        if (node == null || node == root) {
+            return null;
+        }
+
+        TreeNode<Course> current = root;
+        TreeNode<Course> parent = null;
+
+        while (current != null) {
+            if (node.data.getCcode().equals(current.data.getCcode())) {
+                return parent;
+            }
+
+            parent = current;
+
+            if (node.data.getCcode().compareTo(current.data.getCcode()) < 0) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public void breadth() {
         if(root == null){
             return;
@@ -133,7 +176,6 @@ public class CourseTree implements CommonTreeInterface<Course> {
     }
 
 
-
     public TreeNode<Course> deleteByMergingRecursive(TreeNode<Course> node, Course value){
         if(isEmpty()){
             return null;
@@ -167,7 +209,6 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
 
     public TreeNode<Course> deleteByCopyingRecursive(TreeNode<Course> node, Course value) {
-        // TODO: Implement deletion by copying
         if(isEmpty()){
             return null;
         }
@@ -198,17 +239,6 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     }
 
-    @Override
-    public TreeNode<Course> get(Course data) {
-        // TODO: Implement searching for a course in the tree
-        return null;
-    }
-
-    @Override
-    public TreeNode<Course> getParent(TreeNode<Course> node) {
-        // TODO: Implement finding the parent of a given node
-        return null;
-    }
 
     @Override
     public void deleteByCopying(Course data) {
