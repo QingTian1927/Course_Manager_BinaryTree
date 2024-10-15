@@ -26,9 +26,10 @@ public interface CommonTreeInterface<T> {
     void toInOrderArray(ArrayList<T> array, TreeNode<T> start);
     void balance(ArrayList<T> data, int start, int end);
     void balance();
-    String toPreorderString();
 
     void display(TreeNode<T> node);
     void load(File file);
     void save(File file);
+
+    String toPreorderCodeString();
 }

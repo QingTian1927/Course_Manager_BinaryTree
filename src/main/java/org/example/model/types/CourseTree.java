@@ -3,6 +3,7 @@ package org.example.model.types;
 import org.example.model.binaryTree.CommonTreeInterface;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonQueue;
+import sun.reflect.generics.tree.Tree;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -176,8 +177,18 @@ public class CourseTree implements CommonTreeInterface<Course> {
     }
 
     @Override
-    public String toPreorderString() {
-        return null;
+    public String toPreorderCodeString() {
+        StringBuilder sb = new StringBuilder();
+        preOrderCodeString(sb, root);
+        return sb.toString();
     }
 
+    private void preOrderCodeString(StringBuilder sb, TreeNode<Course> node) {
+        if (node == null) {
+            return;
+        }
+        sb.append(node.toString());
+        preOrderCodeString(sb, node.left);
+        preOrderCodeString(sb, node.right);
+    }
 }
