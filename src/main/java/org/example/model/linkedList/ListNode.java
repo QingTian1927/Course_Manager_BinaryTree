@@ -17,7 +17,7 @@ public class ListNode<T> {
 
     @Override
     public String toString() {
-        return "Node{" +
+        return "ListNode{" +
                 "data=" + data +
                 ", next=" + next +
                 '}';
