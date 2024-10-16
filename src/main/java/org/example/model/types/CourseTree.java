@@ -11,6 +11,21 @@ import java.util.ArrayList;
 public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
 
+    public TreeNode<Course> getRoot() {
+        return root;
+    }
+
+    public int getCourseCount() {
+        return this.countCourses(this.root);
+    }
+
+    private int countCourses(TreeNode<Course> node) {
+        if (node == null) {
+            return 0;
+        }
+        return 1 + countCourses(node.left) + countCourses(node.right);
+    }
+
     @Override
     public void load(File file) {
         // TODO: Implement loading courses from a file
@@ -365,5 +380,31 @@ public class CourseTree implements CommonTreeInterface<Course> {
         sb.append(node.toString());
         preOrderCodeString(sb, node.left);
         preOrderCodeString(sb, node.right);
+    }
+
+    public boolean isBalanced() {
+        return isBalanced(root) != -1;
+    }
+
+    private int isBalanced(TreeNode<Course> node) {
+        if (node == null) {
+            return 0; 
+        }
+
+        int leftHeight = isBalanced(node.left);
+        if (leftHeight == -1) {
+            return -1; 
+        }
+
+        int rightHeight = isBalanced(node.right);
+        if (rightHeight == -1) {
+            return -1; 
+        }
+
+        if (Math.abs(leftHeight - rightHeight) > 1) {
+            return -1; 
+        }
+
+        return Math.max(leftHeight, rightHeight) + 1;
     }
 }
