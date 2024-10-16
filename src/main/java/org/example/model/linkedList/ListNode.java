@@ -2,7 +2,7 @@ package org.example.model.linkedList;
 
 public class ListNode<T> {
     public T data;
-    protected ListNode<T> next;
+    public ListNode<T> next;
 
     public ListNode() {}
 

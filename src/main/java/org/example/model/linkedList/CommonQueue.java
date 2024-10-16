@@ -9,11 +9,24 @@ public class CommonQueue<T> {
     }
 
     public void enqueue(T value){
-
+        if(isEmpty()){
+            ListNode<T> p = new ListNode<>();// p.next = null
+            head = p;// noi vao lien ket
+            tail = p;
+        }
+        else{
+            ListNode<T> p = new ListNode<>();// p.next = null
+            tail.next = p;// noi vao lien ket
+            tail = p;// tro vao cai tiep theo
+        }
     }
 
     public T dequeue(){
+        if(isEmpty()) return null;
 
-        return null;
+        ListNode<T> x = head;
+        head=head.next;
+        x.next = null;
+        return(x.data);
     }
 }
