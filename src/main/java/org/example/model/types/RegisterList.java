@@ -3,26 +3,23 @@ package org.example.model.types;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonList;
 import org.example.model.linkedList.ListNode;
+import sun.reflect.generics.tree.Tree;
 
 import java.time.LocalDate;
 
-public class RegisterList extends CommonList {
+public class RegisterList extends CommonList<Register> {
 
-    public RegisterList(){
+    public RegisterList() {
         super();
     }
 
-    public void addLast(Register register){
+    public void addLast(Register register) {
         super.addLast(register);
     }
 
-    public void addFirst(Register register){
+    public void addFirst(Register register) {
         super.addLast(register);
     }
-
-    private TreeNode<Course> courseRoot;
-    private TreeNode<Student> studentRoot;
-    private ListNode<Register> registerHead;
 
     public TreeNode<Student> findStudent(String scode, TreeNode<Student> root) {
         if (root == null) {
@@ -53,7 +50,7 @@ public class RegisterList extends CommonList {
     }
 
     public ListNode<Register> findRegistration(String ccode, String scode) {
-        ListNode<Register> current = registerHead;
+        ListNode<Register> current = super.head;
 
         while (current != null) {
             if (current.data.getCcode().equals(ccode) && current.data.getScode().equals(scode)) {
@@ -65,7 +62,12 @@ public class RegisterList extends CommonList {
     }
 
 
-    public void registerCourse(String ccode, String scode) {
+    public void registerCourse(
+            String ccode,
+            String scode,
+            TreeNode<Course> courseRoot,
+            TreeNode<Student> studentRoot
+    ) {
         ListNode<Register> existingRegister = findRegistration(ccode, scode);
 
         if (existingRegister != null) {
@@ -116,7 +118,7 @@ public class RegisterList extends CommonList {
         System.out.println("Registration not found. Update mark failed!");
     }
 
-    public void deleteRegister(String scode){
+    public void deleteRegister(String scode) {
         ListNode<Register> current = head;
 
         while (current != null) {
