@@ -43,35 +43,32 @@ public class CourseTree implements CommonTreeInterface<Course> {
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
-            DataParser<Course> dataParser = (String data) -> {
-                String[] properties = data.split(DataParser.PROPERTY_SEPARATOR);
-                if (properties.length != 8) {
-                    return null;
-                }
-                String ccode = properties[0].trim();
-                String scode = properties[1].trim();
-                String sname = properties[2].trim();
-                String semester = properties[3].trim();
-                String year = properties[4].trim();
-                int seats = Validation.parseInt(properties[5].trim());
-                int registered = Validation.parseInt(properties[6].trim());
-                double price = Validation.parseDouble(properties[7].trim());
-
-                return new Course(ccode, scode, sname, semester, year, seats, registered, price);
-            };
-
-            while((line = reader.readLine()) != null){
-                Course course = dataParser.parse(line);
-                if(course != null){
+            while ((line = reader.readLine()) != null) {
+                Course course = parseCourse(line);
+                if (course != null) {
                     insert(course);
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private Course parseCourse(String data) {
+        String[] properties = data.split(DataParser.PROPERTY_SEPARATOR);
+        if (properties.length != 8) {
+            return null;
+        }
+        String ccode = properties[0].trim();
+        String scode = properties[1].trim();
+        String sname = properties[2].trim();
+        String semester = properties[3].trim();
+        String year = properties[4].trim();
+        int seats = Validation.parseInt(properties[5].trim());
+        int registered = Validation.parseInt(properties[6].trim());
+        double price = Validation.parseDouble(properties[7].trim());
 
+        return new Course(ccode, scode, sname, semester, year, seats, registered, price);
     }
 
     @Override
@@ -84,26 +81,21 @@ public class CourseTree implements CommonTreeInterface<Course> {
         }
     }
 
-    public void savePostOrder(BufferedWriter writer, TreeNode<Course> node) throws IOException{
-        if(node == null){
+    public void savePostOrder(BufferedWriter writer, TreeNode<Course> node) throws IOException {
+        if (node == null) {
             return;
         }
 
         savePostOrder(writer, node.left);
         savePostOrder(writer, node.right);
 
-        DataWriter<Course> courseDataWriter = new DataWriter<Course>() {
-            @Override
-            public String write(Course data) {
-                return data.toDataString();
-            }
-        };
-
-        writer.write(courseDataWriter.write(node.data));
+        writer.write(formatCourse(node.data));
         writer.newLine();
-        
     }
 
+    private String formatCourse(Course course) {
+        return course.toDataString();
+    }
 
 
     @Override
