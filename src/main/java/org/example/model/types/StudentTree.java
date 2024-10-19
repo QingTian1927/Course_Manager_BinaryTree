@@ -3,9 +3,11 @@ package org.example.model.types;
 import org.example.model.binaryTree.CommonTreeInterface;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonQueue;
+import org.example.util.Validation;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class StudentTree implements CommonTreeInterface<Student> {
@@ -81,9 +83,9 @@ public class StudentTree implements CommonTreeInterface<Student> {
         if(node == null){
             return;
         }
-        preOrder(node.left);
+        inOrder(node.left);
         System.out.println(node.data.toDataString());
-        preOrder(node.right);
+        inOrder(node.right);
     }
 
     @Override
@@ -91,8 +93,8 @@ public class StudentTree implements CommonTreeInterface<Student> {
         if(node == null){
             return;
         }
-        preOrder(node.left);
-        preOrder(node.right);
+        postOrder(node.left);
+        postOrder(node.right);
         System.out.println(node.data.toDataString());
     }
 
@@ -236,13 +238,47 @@ public class StudentTree implements CommonTreeInterface<Student> {
 
     @Override
     public void load(File file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] properties = line.split(";");
+                if (properties.length == 3) {
+                    String scode = properties[0].trim();
+                    String name = properties[1].trim();
+                    int byear = Integer.parseInt(properties[2].trim());
 
+                    Student student = new Student(scode, name, byear);
+                    insert(student);
+                } else {
+                    System.out.println("Invalid data format: " + line);
+                }
+            }
+            System.out.println("Successfully loaded the student list from the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file.");
+        }
+    }
+
+    private void postOrder(TreeNode<Student> node, BufferedWriter writer) throws IOException {
+        if(node == null){
+            return;
+        }
+        postOrder(node.left, writer);
+        postOrder(node.right, writer);
+        writer.write(node.data.toDataString());
+        writer.newLine();
     }
 
     @Override
     public void save(File file) {
-
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            postOrder(root, writer);
+            System.out.println("Successfully saved the student list to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the file.");
+        }
     }
+
 
     @Override
     public String toPreorderCodeString() {
