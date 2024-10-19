@@ -22,7 +22,7 @@ public interface CommonTreeInterface<T> {
     void deleteByCopying(T data);
     // New method for searching purposes
     TreeNode<T> searchByCode(String code); // Search by course or student code
-    CourseTree searchByName(String name);
+    CommonTreeInterface<T> searchByName(String name);
 
 
     void toInOrderArray(ArrayList<T> array, TreeNode<T> start);

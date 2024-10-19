@@ -1,6 +1,9 @@
 package org.example.model.types;
 
 import org.example.io.DataWriter;
+import org.example.util.Formatter;
+
+import java.time.LocalDate;
 
 public class Student {
     private String scode;  // Student Code
@@ -8,15 +11,16 @@ public class Student {
     private int byear;  // Birth Year
 
     private boolean isInvalidByear(int byear) {
-        return byear < 18;
+        int currentYear = LocalDate.now().getYear();
+        return currentYear - byear > 18;
     }
 
     public Student() {
     }
 
     public Student(String scode, String name, int byear) {
-        this.scode = scode;
-        this.name = name;
+        this.scode = Formatter.normalizeId(scode);
+        this.name = Formatter.normalizeName(name);
 
         if (isInvalidByear(byear)) {
             throw new IllegalArgumentException();
@@ -33,7 +37,7 @@ public class Student {
     }
 
     public void setScode(String scode) {
-        this.scode = scode;
+        this.scode = Formatter.normalizeId(scode);
     }
 
     public String getName() {
@@ -41,7 +45,7 @@ public class Student {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = Formatter.normalizeName(name);
     }
 
     public int getByear() {

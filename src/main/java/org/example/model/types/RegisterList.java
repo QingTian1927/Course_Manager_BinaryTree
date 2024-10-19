@@ -3,11 +3,17 @@ package org.example.model.types;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonList;
 import org.example.model.linkedList.ListNode;
-import sun.reflect.generics.tree.Tree;
 
 import java.time.LocalDate;
 
 public class RegisterList extends CommonList<Register> {
+    private CourseTree courseTree;
+    private StudentTree studentTree;
+
+    public RegisterList(StudentTree studentTree, CourseTree courseTree) {
+        this.studentTree = studentTree;
+        this.courseTree = courseTree;
+    }
 
     public RegisterList() {
         super();
@@ -19,6 +25,16 @@ public class RegisterList extends CommonList<Register> {
 
     public void addFirst(Register register) {
         super.addLast(register);
+    }
+
+    public CourseTree findRegisterCourseByStudent(String scode){
+        CourseTree registerCourse = new CourseTree();
+        for(ListNode<Register> p = head; p != null; p = p.next){
+            if(p.data.getScode().equals(scode)){
+                registerCourse.insert(courseTree.searchByCode(p.data.getCcode()).data);
+            }
+        }
+        return registerCourse;
     }
 
     public TreeNode<Student> findStudent(String scode, TreeNode<Student> root) {
