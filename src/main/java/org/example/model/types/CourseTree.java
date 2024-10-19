@@ -1,12 +1,21 @@
 package org.example.model.types;
 
+import org.example.io.DataParser;
+import org.example.io.DataWriter;
 import org.example.model.binaryTree.CommonTreeInterface;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonQueue;
+import org.example.util.Validation;
 import sun.reflect.generics.tree.Tree;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import javax.xml.crypto.Data;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
@@ -28,13 +37,62 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void load(File file) {
-        // TODO: Implement loading courses from a file
+        if (!file.exists()) {
+            System.out.println("File doesn't exist.");
+            return;
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Course course = parseCourse(line);
+                if (course != null) {
+                    insert(course);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Course parseCourse(String data) {
+        String[] properties = data.split(DataParser.PROPERTY_SEPARATOR);
+        if (properties.length != 8) {
+            return null;
+        }
+        String ccode = properties[0].trim();
+        String scode = properties[1].trim();
+        String sname = properties[2].trim();
+        String semester = properties[3].trim();
+        String year = properties[4].trim();
+        int seats = Validation.parseInt(properties[5].trim());
+        int registered = Validation.parseInt(properties[6].trim());
+        double price = Validation.parseDouble(properties[7].trim());
+
+        return new Course(ccode, scode, sname, semester, year, seats, registered, price);
     }
 
     @Override
     public void save(File file) {
-        // TODO: Implement saving courses to a file
+        Path path = file.toPath();
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            savePostOrder(writer, root);
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving courses to file", e);
+        }
     }
+
+    public void savePostOrder(BufferedWriter writer, TreeNode<Course> node) throws IOException {
+        if (node == null) {
+            return;
+        }
+
+        savePostOrder(writer, node.left);
+        savePostOrder(writer, node.right);
+
+        writer.write(node.data.toDataString());
+        writer.newLine();
+    }
+
 
     @Override
     public void clear() {
@@ -63,7 +121,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             parent = current;
 
             if(value.getCcode().equals(current.data.getCcode())){
-                System.out.println("The course is already in the list.");
+                System.out.println("The course " + current.data + "is already in the list.");
                 return;
             }
 
@@ -80,7 +138,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             parent.right = newNode;
         }
 
-        System.out.println("Add course successfully.");
+        System.out.println("Add course " + value.getCcode() + " successfully.");
     }
 
     @Override
@@ -98,9 +156,9 @@ public class CourseTree implements CommonTreeInterface<Course> {
         if(node == null) {
             return;
         }
-        preOrder(node.left);
+        inOrder(node.left);
         display(node);
-        preOrder(node.right);
+        inOrder(node.right);
     }
 
     @Override
@@ -108,8 +166,8 @@ public class CourseTree implements CommonTreeInterface<Course> {
         if(node == null) {
             return;
         }
-        preOrder(node.left);
-        preOrder(node.right);
+        postOrder(node.left);
+        postOrder(node.right);
         display(node);
     }
 
@@ -407,4 +465,5 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
         return Math.max(leftHeight, rightHeight) + 1;
     }
+
 }

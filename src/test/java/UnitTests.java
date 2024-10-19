@@ -79,8 +79,9 @@ public final class UnitTests {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         manager.preOrder(manager.getRoot());
+        String actualOutput = outContent.toString().trim();
         String expectedOutput = "";
-        assertEquals(expectedOutput, outContent.toString());
+        assertEquals(actualOutput, expectedOutput);
         System.setOut(System.out);
     }
 
