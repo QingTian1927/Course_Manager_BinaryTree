@@ -89,12 +89,8 @@ public class CourseTree implements CommonTreeInterface<Course> {
         savePostOrder(writer, node.left);
         savePostOrder(writer, node.right);
 
-        writer.write(formatCourse(node.data));
+        writer.write(node.data.toDataString());
         writer.newLine();
-    }
-
-    private String formatCourse(Course course) {
-        return course.toDataString();
     }
 
 
