@@ -86,6 +86,33 @@ public class CourseTree implements CommonTreeInterface<Course> {
         }
     }
 
+    public Course getCourseDetailsFromUser(){
+        System.out.println("Please enter the following course details:");
+        System.out.print("Enter course code: ");
+        String ccode = Validation.getString().toUpperCase();
+        if (searchByCode(ccode) != null) {
+            System.out.println("this course has been registered");
+            return null;
+        }
+        System.out.print("Enter course short code: ");
+        String scode = Validation.getString();
+
+        System.out.print("Enter course name: ");
+        String sname = Validation.getString();
+
+        System.out.print("Enter semester: ");
+        String semester = Validation.getString();
+
+        System.out.print("Enter year: ");
+        String year = Validation.getStringYear();
+
+        int seats = Validation.getInteger("Enter seat: ", "Seat must be greater than 0", 0, Integer.MAX_VALUE);
+        int registered = Validation.getInteger("Enter number of registered student for this course: ", "Registered number of student must be greater than 0 and lower than the number of seats.", 0, seats);
+        double price = Validation.getDouble("Enter price of the course: ", "Price should be from 0 to 1000000 or in valid type.", 0, 1000000);
+
+        return new Course(ccode, scode, sname, semester, year, seats, registered, price);
+    }
+
     public void savePostOrder(BufferedWriter writer, TreeNode<Course> node) throws IOException {
         if (node == null) {
             return;

@@ -1,6 +1,7 @@
 package org.example.model.types;
 
 import org.example.io.DataWriter;
+import org.example.util.Formatter;
 import org.example.util.Validation;
 
 public class Course {
@@ -21,9 +22,9 @@ public class Course {
     }
 
     public Course(String ccode, String scode, String sname, String semester, String year, int seats, int registered, double price) {
-        this.ccode = ccode;
-        this.scode = scode;
-        this.sname = sname;
+        this.ccode = Formatter.normalizeId(ccode);
+        this.scode = Formatter.normalizeId(scode);
+        this.sname = Formatter.normalizeName(sname);
         this.semester = semester;
         this.year = year;
 
