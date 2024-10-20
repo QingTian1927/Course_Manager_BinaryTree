@@ -19,6 +19,11 @@ import java.util.Properties;
 
 public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
+    private final RegisterList registerList;
+
+    public CourseTree() {
+        this.registerList = new RegisterList();
+    }
 
     public TreeNode<Course> getRoot() {
         return root;
@@ -79,6 +84,33 @@ public class CourseTree implements CommonTreeInterface<Course> {
         } catch (IOException e) {
             throw new RuntimeException("Error saving courses to file", e);
         }
+    }
+
+    public Course getCourseDetailsFromUser(){
+        System.out.println("Please enter the following course details:");
+        System.out.print("Enter course code: ");
+        String ccode = Validation.getString().toUpperCase();
+        if (searchByCode(ccode) != null) {
+            System.out.println("this course has been registered");
+            return null;
+        }
+        System.out.print("Enter course short code: ");
+        String scode = Validation.getString();
+
+        System.out.print("Enter course name: ");
+        String sname = Validation.getString();
+
+        System.out.print("Enter semester: ");
+        String semester = Validation.getString();
+
+        System.out.print("Enter year: ");
+        String year = Validation.getStringYear();
+
+        int seats = Validation.getInteger("Enter seat: ", "Seat must be greater than 0", 0, Integer.MAX_VALUE);
+        int registered = Validation.getInteger("Enter number of registered student for this course: ", "Registered number of student must be greater than 0 and lower than the number of seats.", 0, seats);
+        double price = Validation.getDouble("Enter price of the course: ", "Price should be from 0 to 1000000 or in valid type.", 0, 1000000);
+
+        return new Course(ccode, scode, sname, semester, year, seats, registered, price);
     }
 
     public void savePostOrder(BufferedWriter writer, TreeNode<Course> node) throws IOException {
@@ -257,7 +289,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
 
     public TreeNode<Course> deleteByMergingRecursive(TreeNode<Course> node, Course value){
-        if(isEmpty()){
+        if (node == null) {
             return null;
         }
 
@@ -268,6 +300,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             // The value to delete is greater, search in the right subtree
             root.right = deleteByMergingRecursive(root.right, value);
         } else {
+            registerList.deleteRegistrationwithCourse(value.getCcode());  // Add Delete Registration with course
             // The value is found, we consider 3 possible ways
             if(node.left == null) return node.right; //Tree has only one right child
             if(node.right == null) return node.left; //Tree has only one left child
@@ -291,7 +324,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
 
     public TreeNode<Course> deleteByCopyingRecursive(TreeNode<Course> node, Course value) {
-        if(isEmpty()){
+        if (node == null) {
             return null;
         }
 
@@ -302,6 +335,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             // The value to delete is greater, search in the right subtree
             root.right = deleteByMergingRecursive(root.right, value);
         } else {
+            registerList.deleteRegistrationwithCourse(value.getCcode()); // Add Delete Registration with course
             // The value is found, we consider 3 possible ways
             if(node.left == null) return node.right; //Tree has only one right child
             if(node.right == null) return node.left; //Tree has only one left child
@@ -325,18 +359,16 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void deleteByCopying(Course data) {
-        // TODO: Implement deletion by copying
+        root = deleteByCopyingRecursive(root, data);
     }
 
     @Override
     public void deleteByMerging(Course data) {
-        // TODO: Implement deletion by merging
-
+        root = deleteByMergingRecursive(root, data);
     }
 
     @Override
     public void toInOrderArray(ArrayList<Course> array, TreeNode<Course> start) {
-        // TODO: Convert the tree to an in-order array
         if(start == null){
             return;
         }
@@ -370,7 +402,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void display(TreeNode<Course> node) {
-        System.out.println(node.data);
+        System.out.println(node.data.toDataString());
     }
 
     @Override
@@ -421,7 +453,6 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
         newTree.breadth();
         return newTree;
-
     }
 
     @Override
