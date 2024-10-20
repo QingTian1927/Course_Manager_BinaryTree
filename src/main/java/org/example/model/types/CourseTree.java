@@ -19,6 +19,11 @@ import java.util.Properties;
 
 public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
+    private final RegisterList registerList;
+
+    public CourseTree() {
+        this.registerList = new RegisterList();
+    }
 
     public TreeNode<Course> getRoot() {
         return root;
@@ -257,7 +262,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
 
     public TreeNode<Course> deleteByMergingRecursive(TreeNode<Course> node, Course value){
-        if(isEmpty()){
+        if (node == null) {
             return null;
         }
 
@@ -268,6 +273,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             // The value to delete is greater, search in the right subtree
             root.right = deleteByMergingRecursive(root.right, value);
         } else {
+            registerList.deleteRegistrationwithCourse(value.getCcode());  // Add Delete Registration with course
             // The value is found, we consider 3 possible ways
             if(node.left == null) return node.right; //Tree has only one right child
             if(node.right == null) return node.left; //Tree has only one left child
@@ -291,7 +297,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
 
     public TreeNode<Course> deleteByCopyingRecursive(TreeNode<Course> node, Course value) {
-        if(isEmpty()){
+        if (node == null) {
             return null;
         }
 
@@ -302,6 +308,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             // The value to delete is greater, search in the right subtree
             root.right = deleteByMergingRecursive(root.right, value);
         } else {
+            registerList.deleteRegistrationwithCourse(value.getCcode()); // Add Delete Registration with course
             // The value is found, we consider 3 possible ways
             if(node.left == null) return node.right; //Tree has only one right child
             if(node.right == null) return node.left; //Tree has only one left child
@@ -325,18 +332,16 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void deleteByCopying(Course data) {
-        // TODO: Implement deletion by copying
+        root = deleteByCopyingRecursive(root, data);
     }
 
     @Override
     public void deleteByMerging(Course data) {
-        // TODO: Implement deletion by merging
-
+        root = deleteByMergingRecursive(root, data);
     }
 
     @Override
     public void toInOrderArray(ArrayList<Course> array, TreeNode<Course> start) {
-        // TODO: Convert the tree to an in-order array
         if(start == null){
             return;
         }
@@ -370,7 +375,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void display(TreeNode<Course> node) {
-        System.out.println(node.data);
+        System.out.println(node.data.toDataString());
     }
 
     @Override
@@ -421,7 +426,6 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
         newTree.breadth();
         return newTree;
-
     }
 
     @Override

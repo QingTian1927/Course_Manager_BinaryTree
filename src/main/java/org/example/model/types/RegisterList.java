@@ -27,6 +27,14 @@ public class RegisterList extends CommonList<Register> {
         super.addLast(register);
     }
 
+    public void deleteRegistrationwithCourse(String ccode){
+        for(ListNode<Register> p = head; p != null; p = p.next){
+            if(p.data.getScode().equals(ccode)){
+                this.delete(p);
+            }
+        }
+    }
+
     public CourseTree findRegisterCourseByStudent(String scode){
         CourseTree registerCourse = new CourseTree();
         for(ListNode<Register> p = head; p != null; p = p.next){
