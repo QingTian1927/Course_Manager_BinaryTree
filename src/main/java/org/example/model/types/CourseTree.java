@@ -21,8 +21,8 @@ public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
     private final RegisterList registerList;
 
-    public CourseTree() {
-        this.registerList = new RegisterList();
+    public CourseTree(RegisterList registerList){
+        this.registerList = registerList;
     }
 
     public TreeNode<Course> getRoot() {
