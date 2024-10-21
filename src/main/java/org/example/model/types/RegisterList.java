@@ -22,6 +22,22 @@ public class RegisterList extends CommonList<Register> {
         this.courseTree = courseTree;
     }
 
+    public CourseTree getCourseTree() {
+        return courseTree;
+    }
+
+    public void setCourseTree(CourseTree courseTree) {
+        this.courseTree = courseTree;
+    }
+
+    public StudentTree getStudentTree() {
+        return studentTree;
+    }
+
+    public void setStudentTree(StudentTree studentTree) {
+        this.studentTree = studentTree;
+    }
+
     public RegisterList() {
         super();
     }

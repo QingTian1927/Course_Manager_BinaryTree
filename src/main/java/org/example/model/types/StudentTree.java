@@ -255,7 +255,9 @@ public class StudentTree implements CommonTreeInterface<Student> {
             }
             System.out.println("Successfully loaded the student list from the file.");
         } catch (IOException e) {
-            System.out.println("An error occurred while reading the file.");
+            System.out.println("[FATAL] Failed to read students.txt");
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 

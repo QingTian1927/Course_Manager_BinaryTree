@@ -12,7 +12,7 @@ public class Student {
 
     private boolean isInvalidByear(int byear) {
         int currentYear = LocalDate.now().getYear();
-        return currentYear - byear > 18;
+        return currentYear - byear < 18;
     }
 
     public Student() {
