@@ -1,12 +1,19 @@
 package org.example.model.types;
 
+import org.example.io.DataParser;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonList;
 import org.example.model.linkedList.ListNode;
+import org.example.util.Validation;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class RegisterList extends CommonList<Register> {
+    public static final String REGISTER_DATE_FORMAT = "yyyy-MM-dd";
     private CourseTree courseTree;
     private StudentTree studentTree;
 
@@ -27,18 +34,19 @@ public class RegisterList extends CommonList<Register> {
         super.addLast(register);
     }
 
-    public void deleteRegistrationwithCourse(String ccode){
-        for(ListNode<Register> p = head; p != null; p = p.next){
-            if(p.data.getScode().equals(ccode)){
+    public void deleteRegistrationwithCourse(String ccode) {
+        for (ListNode<Register> p = head; p != null; p = p.next) {
+            if (p.data.getScode().equals(ccode)) {
                 this.delete(p);
             }
         }
     }
 
-    public CourseTree findRegisterCourseByStudent(String scode){
-        CourseTree registerCourse = new CourseTree();
-        for(ListNode<Register> p = head; p != null; p = p.next){
-            if(p.data.getScode().equals(scode)){
+    public CourseTree findRegisterCourseByStudent(String scode) {
+        CourseTree registerCourse = new CourseTree(this);
+
+        for (ListNode<Register> p = head; p != null; p = p.next) {
+            if (p.data.getScode().equals(scode)) {
                 registerCourse.insert(courseTree.searchByCode(p.data.getCcode()).data);
             }
         }
@@ -49,28 +57,26 @@ public class RegisterList extends CommonList<Register> {
         if (root == null) {
             return null;
         }
-
         if (root.data.getScode().equals(scode)) {
             return root;
-        } else if (scode.compareTo(root.data.getScode()) < 0) {
-            return findStudent(scode, root.left);
-        } else {
-            return findStudent(scode, root.right);
         }
+        if (scode.compareTo(root.data.getScode()) < 0) {
+            return findStudent(scode, root.left);
+        }
+        return findStudent(scode, root.right);
     }
 
     public TreeNode<Course> findCourse(String ccode, TreeNode<Course> root) {
         if (root == null) {
             return null;
         }
-
         if (root.data.getCcode().equals(ccode)) {
             return root;
-        } else if (ccode.compareTo(root.data.getCcode()) < 0) {
-            return findCourse(ccode, root.left);
-        } else {
-            return findCourse(ccode, root.right);
         }
+        if (ccode.compareTo(root.data.getCcode()) < 0) {
+            return findCourse(ccode, root.left);
+        }
+        return findCourse(ccode, root.right);
     }
 
     public ListNode<Register> findRegistration(String ccode, String scode) {
@@ -125,12 +131,12 @@ public class RegisterList extends CommonList<Register> {
         addFirst(newRegistration);
 
         course.updateSeatAndRegister(-1, 1);
-
         System.out.println("Course successfully registered for student: " + scode);
     }
 
     public void updateMark(String scode, String ccode, double newmark) {
         ListNode<Register> current = head;
+
         while (current != null) {
             if (scode.equals(current.data.getScode()) && ccode.equals(current.data.getCcode())) {
                 current.data.setMark(newmark);
@@ -151,7 +157,6 @@ public class RegisterList extends CommonList<Register> {
             }
             current = current.next;
         }
-        return;
     }
 
     private boolean shouldSwap(ListNode<Register> a, ListNode<Register> b) {
@@ -212,9 +217,49 @@ public class RegisterList extends CommonList<Register> {
                     current.data.getMark(),
                     current.data.getState()
             );
-
-            //System.out.println("---------------------");
             current = current.next;
         }
+    }
+
+    public void load(File file) throws IOException {
+        DataParser<Register> dataParser = (String data) -> {
+            String[] properties = data.split(DataParser.PROPERTY_SEPARATOR);
+            if (properties.length != 5) {
+                return null;
+            }
+
+            String ccode = properties[0].trim();
+            String scode = properties[1].trim();
+
+            LocalDate bdate;
+            try {
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(REGISTER_DATE_FORMAT);
+                bdate = LocalDate.parse(properties[2].trim(), dateFormat);
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format: " + properties[2]);
+                return null;
+            }
+
+            String markString = properties[3].trim().replace(",", ".");
+            double mark = Double.parseDouble(markString);
+            if (mark < 0 || mark > 10) {
+                System.out.println("Invalid mark: " + properties[3]);
+                return null;
+            }
+
+            int state = Integer.parseInt(properties[4].trim());
+            if (!Validation.isBooleanInt(state)) {
+                System.out.println("Invalid state: " + properties[4]);
+                return null;
+            }
+
+            return new Register(ccode, scode, bdate, mark, state);
+        };
+
+        this.readFile(file, dataParser);
+    }
+
+    public void save(File file) throws IOException {
+        this.saveFile(file, Register::toDataString);
     }
 }
