@@ -25,6 +25,10 @@ public class StudentTree implements CommonTreeInterface<Student> {
         registerList = new RegisterList();
     }
 
+    public TreeNode<Student> getRoot() {
+        return root;
+    }
+
     @Override
     public void clear() {
         this.root = null;
@@ -118,8 +122,41 @@ public class StudentTree implements CommonTreeInterface<Student> {
         }
     }
 
+
     @Override
-    public TreeNode<Student> get(Student data) {
+    public TreeNode<Student> get(Student value) {
+        TreeNode<Student> current = root;
+
+        while(current != null){
+
+            if(value.getScode().equals(current.data.getScode())){
+                return current;
+            }
+
+            if(value.getScode().compareTo(current.data.getScode()) < 0){
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        return null;
+    }
+
+    public TreeNode<Student> get(String code) {
+        TreeNode<Student> current = root;
+
+        while(current != null){
+
+            if(code.equals(current.data.getScode())){
+                return current;
+            }
+
+            if(code.compareTo(current.data.getScode()) < 0){
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
         return null;
     }
 

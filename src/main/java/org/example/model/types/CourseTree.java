@@ -225,6 +225,23 @@ public class CourseTree implements CommonTreeInterface<Course> {
         return null;
     }
 
+    public TreeNode<Course> get(String code) {
+        TreeNode<Course> current = root;
+
+        while(current != null){
+            if(code.equals(current.data.getCcode())){
+                return current;
+            }
+
+            if(code.compareTo(current.data.getCcode()) < 0){
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        return null;
+    }
+
     @Override
     public TreeNode<Course> getParent(TreeNode<Course> node) {
         if (node == null || node == root) {

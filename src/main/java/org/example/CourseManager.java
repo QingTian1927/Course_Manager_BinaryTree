@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.model.types.Course;
 import org.example.model.types.CourseTree;
 import org.example.model.types.RegisterList;
 import org.example.model.types.StudentTree;
@@ -10,10 +11,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class CourseManager {
+    public static final String COURSE_SAVE_FILE = "data/courses.txt";
+    public static final String STUDENT_SAVE_FILE = "data/students.txt";
+    public static final String REGISTER_SAVE_FILE = "data/registers.txt";
+
     public static void main(String[] args) {
-        final String COURSE_SAVE_FILE = "data/courses.txt";
-        final String STUDENT_SAVE_FILE = "data/students.txt";
-        final String REGISTER_SAVE_FILE = "data/registers.txt";
 
         RegisterList registerList = new RegisterList();
         StudentTree studentTree = new StudentTree(registerList);
@@ -40,13 +42,13 @@ public class CourseManager {
 
             switch (choice) {
                 case "1":
-                    manageCourseTree();
+                    manageCourseTree(courseTree);
                     break;
                 case "2":
-                    manageStudentTree();
+                    manageStudentTree(studentTree);
                     break;
                 case "3":
-                    manageRegisterList();
+                    manageRegisterList(registerList);
                     break;
                 case "0":
                     isRunning = false;
@@ -58,7 +60,7 @@ public class CourseManager {
         System.out.println();
     }
 
-    public static void manageCourseTree() {
+    public static void manageCourseTree(CourseTree courseTree) {
         while (true) {
             Menu.printCourseMenu();
             String choice = Validation.getString();
@@ -68,22 +70,35 @@ public class CourseManager {
                 case "1":
                     break;
                 case "2":
+                    courseTree.preOrder(courseTree.getRoot());
                     break;
                 case "3":
+                    courseTree.save(new File(COURSE_SAVE_FILE));
                     break;
                 case "4":
+                    System.out.print("Search by code: ");
+                    courseTree.searchByCode(Validation.getString());
                     break;
                 case "5":
+                    System.out.print("Delete by code: ");
+                    courseTree.deleteByCopying(courseTree.get(Validation.getString()).data);
                     break;
                 case "6":
+                    System.out.print("Delete by code: ");
+                    courseTree.deleteByMerging(courseTree.get(Validation.getString()).data);
                     break;
                 case "7":
+                    courseTree.balance();
                     break;
                 case "8":
+                    courseTree.breadth();
                     break;
                 case "9":
+                    System.out.println("Number of courses: " + courseTree.getCourseCount());
                     break;
                 case "10":
+                    CourseTree foundCourse = courseTree.searchByName(Validation.getString());
+                    foundCourse.breadth();
                     break;
                 case "11":
                     break;
@@ -96,7 +111,7 @@ public class CourseManager {
         }
     }
 
-    public static void manageStudentTree() {
+    public static void manageStudentTree(StudentTree studentTree) {
         while (true) {
             Menu.printStudentMenu();
             String choice = Validation.getString();
@@ -106,12 +121,18 @@ public class CourseManager {
                 case "1":
                     break;
                 case "2":
+                    studentTree.inOrder(studentTree.getRoot());
                     break;
                 case "3":
+                    studentTree.save(new File(STUDENT_SAVE_FILE));
                     break;
                 case "4":
+                    System.out.print("Search by code: ");
+                    studentTree.searchByCode(Validation.getString());
                     break;
                 case "5":
+                    System.out.print("Delete by code: ");
+                    studentTree.deleteByCopying(studentTree.get(Validation.getString()).data);
                     break;
                 case "6":
                     break;
@@ -126,7 +147,7 @@ public class CourseManager {
         }
     }
 
-    public static void manageRegisterList() {
+    public static void manageRegisterList(RegisterList registerList) {
         while (true) {
             Menu.printRegisterMenu();
             String choice = Validation.getString();
@@ -136,10 +157,19 @@ public class CourseManager {
                 case "1":
                     break;
                 case "2":
+                    registerList.display();
                     break;
                 case "3":
+                    try {
+                        registerList.save(new File(REGISTER_SAVE_FILE));
+                    } catch (IOException e) {
+                        System.out.println("[FATAL] Cannot save to registers.txt");
+                        e.printStackTrace();
+                        System.exit(1);
+                    }
                     break;
                 case "4":
+                    registerList.sort().display();
                     break;
                 case "5":
                     break;
