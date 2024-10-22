@@ -19,7 +19,9 @@ import java.util.Properties;
 
 public class CourseTree implements CommonTreeInterface<Course> {
     private TreeNode<Course> root;
-    private final RegisterList registerList;
+    private  RegisterList registerList;
+
+    public CourseTree(){}
 
     public CourseTree(RegisterList registerList){
         this.registerList = registerList;
@@ -351,6 +353,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             TreeNode<Course> maxNode = findMaxNode(subRoot);
             node.data = maxNode.data;
             node.left = deleteByCopyingRecursive(node.left, maxNode.data);
+
         }
 
         return node;
@@ -402,8 +405,53 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void display(TreeNode<Course> node) {
-        System.out.println(node.data.toDataString());
+        if (node == null) {
+            return;
+        }
+
+        System.out.printf(
+                "%-10s | %-10s | %-30s | %-10s | %-10s | %-7d | %-12d | %.3f\n",
+                node.data.getCcode(),
+                node.data.getScode(),
+                node.data.getSname(),
+                node.data.getSemester(),
+                node.data.getYear(),
+                node.data.getSeats(),
+                node.data.getRegistered(),
+                node.data.getPrice()
+        );
     }
+
+
+    public void displayCourses(int mode) {
+        if (this.root == null) {
+            System.out.println("No course yet");
+            return;
+        }
+
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-10s | %-10s | %-30s | %-10s | %-10s | %-7s | %-12s | %s\n",
+                "CourseID", "SubjectID", "Subject Name", "Semester", "Year", "Seats", "Registered", "Price"
+        );
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+
+        if(mode == 1){
+            preOrder(this.root);
+        } else if(mode == 2){
+            inOrder(this.root);
+        } else if(mode == 3){
+            postOrder(this.root);
+        } else if(mode == 4) {
+            breadth();
+        } else {
+            System.out.println("Nhìn lại số đi Dũng chan");
+        }
+
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+    }
+
+
 
     @Override
     public TreeNode<Course> searchByCode(String code){
@@ -417,6 +465,13 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
         if(foundCourse != null){
             System.out.println("Course Found: " + foundCourse.data);
+            StudentTree findRegisterStudent = registerList.findRegisterStudentByCourse(code);
+            if (findRegisterStudent != null){
+                System.out.println("Students register this course: ");
+                findRegisterStudent.displayStudents(4);
+            } else{
+                System.out.println("Course has no student.");
+            }
             return foundCourse;
         } else{
             System.out.println("Course not found.");

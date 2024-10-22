@@ -86,14 +86,6 @@ public class Register {
                 '}';
     }
 
-    public void displayRegistrationInfo() {
-        System.out.println("Course Code: " + ccode);
-        System.out.println("Student Code: " + scode);
-        System.out.println("Registration date: " + bdate);
-        System.out.println("Mark: " + mark);
-        System.out.println("State: " + state);
-    }
-
     public String toDataString() {
         // what the fuck?
         return String.format(
