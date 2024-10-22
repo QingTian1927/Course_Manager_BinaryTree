@@ -35,6 +35,16 @@ public class RegisterList extends CommonList<Register> {
         }
     }
 
+    public StudentTree findRegisterStudentByCourse(String ccode){
+        StudentTree registerStudent = new StudentTree();
+        for(ListNode<Register> p = head; p != null; p = p.next){
+            if(p.data.getCcode().equals(ccode)){
+                registerStudent.insert(studentTree.searchByCode(p.data.getScode()).data);
+            }
+        }
+        return registerStudent;
+    }
+
     public CourseTree findRegisterCourseByStudent(String scode){
         CourseTree registerCourse = new CourseTree();
         for(ListNode<Register> p = head; p != null; p = p.next){
