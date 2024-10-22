@@ -112,7 +112,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
         TreeNode<Student> cur;
         while(!queue.isEmpty()){
             cur = queue.dequeue();
-            cur.data.displayStudentInfo();
+            display(cur);
             if(cur.left != null){
                 queue.enqueue(cur.left);
             }
@@ -249,7 +249,8 @@ public class StudentTree implements CommonTreeInterface<Student> {
             if(cur.right != null){
                 queue.enqueue(cur.right);
             }
-        }System.out.println("No course found");
+        }
+        System.out.println("No course found");
         return null;
     }
 
@@ -270,7 +271,44 @@ public class StudentTree implements CommonTreeInterface<Student> {
 
     @Override
     public void display(TreeNode<Student> node) {
+        if (node == null) {
+            return;
+        }
 
+        System.out.printf(
+                "%-15s | %-40s | %s\n",
+                node.data.getScode(),
+                node.data.getName(),
+                node.data.getByear()
+        );
+    }
+
+    public void displayStudents(int mode) {
+        if (this.root == null) {
+            System.out.println("No Student yet");
+            return;
+        }
+
+        System.out.println("---------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-15s | %-40s | %s\n",
+                "StudentID", "Student's Name", "Student's Birth Year"
+        );
+        System.out.println("---------------------------------------------------------------------------------");
+
+        if(mode == 1){
+            preOrder(this.root);
+        } else if(mode == 2){
+            inOrder(this.root);
+        } else if(mode == 3){
+            postOrder(this.root);
+        } else if(mode == 4) {
+            breadth();
+        } else {
+            System.out.println("Nhìn lại số đi Dũng chan");
+        }
+
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
     }
 
     @Override

@@ -77,10 +77,4 @@ public class Student {
         );
     }
 
-    public void displayStudentInfo() {
-        System.out.println("Student Code: " + scode);
-        System.out.println("Student Name: " + name);
-        System.out.println("Student's Birth Year : " + byear);
-        System.out.println("Student Birth Year: " + byear);
-    }
 }

@@ -167,14 +167,5 @@ public class Course {
         );
     }
 
-    public void displayCourseInfo() {
-        System.out.println("Course Code: " + ccode);
-        System.out.println("Subject Code: " + scode);
-        System.out.println("Subject Name: " + sname);
-        System.out.println("Semester: " + semester);
-        System.out.println("Year: " + year);
-        System.out.println("Seats: " + seats);
-        System.out.println("Registered: " + registered);
-        System.out.println("Price: " + price);
-    }
+
 }
