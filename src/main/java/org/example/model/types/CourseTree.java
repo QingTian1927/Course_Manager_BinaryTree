@@ -57,7 +57,9 @@ public class CourseTree implements CommonTreeInterface<Course> {
                 }
             }
         } catch (IOException e) {
+            System.out.println("[FATAL] Failed to read courses.txt");
             e.printStackTrace();
+            System.exit(1);
         }
     }
 
@@ -222,6 +224,23 @@ public class CourseTree implements CommonTreeInterface<Course> {
             }
         }
 
+        return null;
+    }
+
+    public TreeNode<Course> get(String code) {
+        TreeNode<Course> current = root;
+
+        while(current != null){
+            if(code.equals(current.data.getCcode())){
+                return current;
+            }
+
+            if(code.compareTo(current.data.getCcode()) < 0){
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
         return null;
     }
 
@@ -485,8 +504,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             return null;
         }
 
-        CourseTree newTree = new CourseTree();
-
+        CourseTree newTree = new CourseTree(this.registerList);
         CommonQueue<TreeNode<Course>> queue = new CommonQueue<>();
         queue.enqueue(root);
 
