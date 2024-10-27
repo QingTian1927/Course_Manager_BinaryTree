@@ -554,9 +554,9 @@ public class StudentTree implements CommonTreeInterface<Student> {
         if(p == null){
             return;
         }
-        s.append(p.data.toDataString()).append("\n");
         postOrderString(p.left, s);
         postOrderString(p.right, s);
+        s.append(p.data.toDataString()).append("\n");
     }
 
     public String toPostorderCodeString() {
