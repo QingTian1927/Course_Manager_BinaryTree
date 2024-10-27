@@ -3,11 +3,9 @@ package org.example.model.types;
 import org.example.model.binaryTree.CommonTreeInterface;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonQueue;
-import org.example.util.Validation;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class StudentTree implements CommonTreeInterface<Student> {
@@ -180,13 +178,200 @@ public class StudentTree implements CommonTreeInterface<Student> {
     }
 
     @Override
-    public void deleteByMerging(Student data) {
+    public void deleteByMerging(Student x) {
+        if (isEmpty()) {
+            return;
+        }
 
+        TreeNode<Student> curr = root;
+        TreeNode<Student> currParent = null;
+
+        while (curr != null) {
+            if (curr.data.getScode().equals(x.getScode())) {
+                break;
+            }
+
+            currParent = curr;
+            if (curr.data.getScode().compareTo(x.getScode()) > 0) {
+                curr = curr.left;
+            } else {
+                curr = curr.right;
+            }
+        }
+
+        if (curr == null) {
+            return;
+        }
+
+        //Node cần xoá là leaf
+        if (curr.left == null && curr.right == null) {
+            if (currParent == null) {
+                root = null;
+            } else {
+                if (currParent.left == curr) {
+                    currParent.left = null;
+                } else {
+                    currParent.right = null;
+                }
+            }
+
+            return;
+        }
+
+
+        //1 con bên trái
+        if (curr.left != null && curr.right == null) {
+            if (currParent == null) {
+                root = curr.left;
+            } else {
+                if (currParent.left == curr) {
+                    currParent.left = curr.left;
+                } else {
+                    currParent.right = curr.left;
+                }
+            }
+
+            curr.left = null;
+            return;
+        }
+
+        //1 con bên phải
+        if (curr.left == null && curr.right != null) {
+            if (currParent == null) {
+                root = curr.right;
+            } else {
+                if (currParent.left == curr) {
+                    currParent.left = curr.right;
+                } else {
+                    currParent.right = curr.right;
+                }
+            }
+
+            curr.right = null;
+            return;
+        }
+
+
+        //Xoá bằng merging
+        TreeNode<Student> rightmostNode;
+        TreeNode<Student> replaceNode;
+
+        rightmostNode = curr.right;
+        replaceNode = curr.left;
+
+        while (replaceNode.right != null) {
+            replaceNode = replaceNode.right;
+        }
+
+        replaceNode.right = rightmostNode;
+        curr.right = null;
+
+        if (currParent == null) {
+            root = curr.left;
+        } else {
+            if (currParent.left == curr) {
+                currParent.left = curr.left;
+            } else {
+                currParent.right = curr.left;
+            }
+        }
+
+        curr.left = null;
+        return;
     }
 
     @Override
-    public void deleteByCopying(Student data) {
+    public void deleteByCopying(Student x) {
+        if (isEmpty()) {
+            return;
+        }
 
+        TreeNode<Student> curr = root;
+        TreeNode<Student> currParent = null;
+
+        while (curr != null) {
+            if (curr.data.getScode().equals(x.getScode())) {
+                break;
+            }
+
+            currParent = curr;
+            if (curr.data.getScode().compareTo(x.getScode()) > 0) {
+                curr = curr.left;
+            } else {
+                curr = curr.right;
+            }
+        }
+
+        if (curr == null) {
+            return;
+        }
+
+
+        //Node is leaf
+        if (curr.left == null && curr.right == null) {
+            if (currParent == null) {
+                root = null;
+            } else {
+                if (currParent.left == curr) {
+                    currParent.left = null;
+                } else {
+                    currParent.right = null;
+                }
+            }
+
+            return;
+        }
+
+
+        //1 left child only
+        if (curr.left != null && curr.right == null) {
+            if (currParent == null) {
+                root = curr.left;
+            } else {
+                if (currParent.left == curr) {
+                    currParent.left = curr.left;
+                } else {
+                    currParent.right = curr.left;
+                }
+            }
+
+            curr.left = null;
+            return;
+        }
+
+        //1 right child only
+        if (curr.left == null && curr.right != null) {
+            if (currParent == null) {
+                root = curr.right;
+            } else {
+                if (currParent.left == curr) {
+                    currParent.left = curr.right;
+                } else {
+                    currParent.right = curr.right;
+                }
+            }
+
+            curr.right = null;
+            return;
+        }
+
+        //delete by copying
+        TreeNode<Student> replaceNode;
+
+        replaceNode = curr.left;
+        TreeNode<Student> parentReplaceNode = null;
+
+        while (replaceNode.right != null) {
+            parentReplaceNode = replaceNode;
+            replaceNode = replaceNode.right;
+        }
+
+        curr.data = replaceNode.data;
+        if(parentReplaceNode == null){
+            curr.left = replaceNode.left;
+        }else{
+            parentReplaceNode.right = replaceNode.left;;
+        }
     }
 
     @Override
@@ -255,18 +440,31 @@ public class StudentTree implements CommonTreeInterface<Student> {
     }
 
     @Override
-    public void toInOrderArray(ArrayList<Student> array, TreeNode<Student> start) {
-
+    public void toInOrderArray(ArrayList<Student> a, TreeNode<Student> from) {
+        if(from == null){
+            return;
+        }
+        toInOrderArray(a, from.left);
+        a.add(from.data);
+        toInOrderArray(a, from.right);
     }
 
     @Override
-    public void balance(ArrayList<Student> data, int start, int end) {
-
+    public void balance(ArrayList<Student> a, int from, int to) {
+        if(from <= to){
+            int mid = (from + to)/2;
+            insert(a.get(mid));
+            balance(a, from, mid-1);
+            balance(a, mid+1, to);
+        }
     }
 
     @Override
     public void balance() {
-
+        ArrayList<Student> a = new ArrayList<>();
+        toInOrderArray(a, root);
+        clear();
+        balance(a, 0, a.size()-1);
     }
 
     @Override
@@ -335,30 +533,35 @@ public class StudentTree implements CommonTreeInterface<Student> {
             System.exit(1);
         }
     }
-
-    private void postOrder(TreeNode<Student> node, BufferedWriter writer) throws IOException {
-        if(node == null){
-            return;
-        }
-        postOrder(node.left, writer);
-        postOrder(node.right, writer);
-        writer.write(node.data.toDataString());
-        writer.newLine();
-    }
-
+//***************************************
+    //*********
     @Override
     public void save(File file) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            postOrder(root, writer);
+            writer.write(toPostorderCodeString());
             System.out.println("Successfully saved the student list to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred while saving the file.");
         }
     }
 
-
     @Override
     public String toPreorderCodeString() {
         return "";
+    }
+
+    public void postOrderString(TreeNode<Student> p, StringBuilder s){
+        if(p == null){
+            return;
+        }
+        postOrderString(p.left, s);
+        postOrderString(p.right, s);
+        s.append(p.data.toDataString()).append("\n");
+    }
+
+    public String toPostorderCodeString() {
+        StringBuilder s = new StringBuilder();
+        postOrderString(root, s);
+        return s.toString();
     }
 }
