@@ -119,6 +119,42 @@ public class RegisterList extends CommonList<Register> {
         return null;
     }
 
+    public Register getRegisterDetailsFromUser() {
+        System.out.println("Please enter the following registration details:");
+
+        System.out.print("Enter course code: ");
+        String ccode = Validation.getString().toUpperCase();
+
+        System.out.print("Enter student code: ");
+        String scode = Validation.getString();
+
+        LocalDate bdate = null;
+        while (bdate == null) {
+            System.out.print("Enter registration date (YYYY-MM-DD): ");
+            String dateInput = Validation.getString();
+            try {
+                bdate = LocalDate.parse(dateInput, DateTimeFormatter.ISO_LOCAL_DATE);
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Please enter the date in YYYY-MM-DD format.");
+            }
+        }
+
+        double mark = -1;
+        while (mark < 0 || mark > 10) {
+            mark = Validation.getDouble(
+                    "Enter mark (0-10): ",
+                    "Mark must be between 0 and 10.",
+                    0, 10
+            );
+            if (mark < 0 || mark > 10) {
+                System.out.println();
+            }
+        }
+
+        int state = (mark >= 5) ? 1 : 0;
+
+        return new Register(ccode, scode, bdate, mark, state);
+    }
 
     public void registerCourse(
             String ccode,
@@ -162,12 +198,21 @@ public class RegisterList extends CommonList<Register> {
         System.out.println("Course successfully registered for student: " + scode);
     }
 
-    public void updateMark(String scode, String ccode, double newmark) {
-        ListNode<Register> current = head;
+    public void updateMark() {
+        System.out.print("Enter ccode: ");
+        String ccode = Validation.getString();
+        System.out.print("Enter scode: ");
+        String scode = Validation.getString();
 
+        ListNode<Register> current = head;
         while (current != null) {
             if (scode.equals(current.data.getScode()) && ccode.equals(current.data.getCcode())) {
-                current.data.setMark(newmark);
+                double newMark = Validation.getDouble(
+                        "Enter new mark: ",
+                        "Mark must be between 0 and 10",
+                        0, 10
+                );
+                current.data.setMark(newMark);
                 System.out.println("Mark Updated successfully.");
                 return;
             }

@@ -18,12 +18,18 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class CourseTree implements CommonTreeInterface<Course> {
+    public static final int DISPLAY_PREORDER = 1;
+    public static final int DISPLAY_INORDER = 2;
+    public static final int DISPLAY_POSTORDER = 3;
+    public static final int DISPLAY_BREADTH = 4;
+
     private TreeNode<Course> root;
-    private  RegisterList registerList;
+    private RegisterList registerList;
 
-    public CourseTree(){}
+    public CourseTree() {
+    }
 
-    public CourseTree(RegisterList registerList){
+    public CourseTree(RegisterList registerList) {
         this.registerList = registerList;
     }
 
@@ -53,7 +59,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
             while ((line = reader.readLine()) != null) {
                 Course course = parseCourse(line);
                 if (course != null) {
-                    insert(course);
+                    insert(course, false);
                 }
             }
         } catch (IOException e) {
@@ -85,12 +91,13 @@ public class CourseTree implements CommonTreeInterface<Course> {
         Path path = file.toPath();
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
             savePostOrder(writer, root);
+            System.out.println("File saved successfully.");
         } catch (IOException e) {
             throw new RuntimeException("Error saving courses to file", e);
         }
     }
 
-    public Course getCourseDetailsFromUser(){
+    public Course getCourseDetailsFromUser() {
         System.out.println("Please enter the following course details:");
         System.out.print("Enter course code: ");
         String ccode = Validation.getString().toUpperCase();
@@ -142,9 +149,13 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void insert(Course value) {
+        insert(value, true);
+    }
+
+    private void insert(Course value, boolean display) {
         TreeNode<Course> newNode = new TreeNode<>(value);
 
-        if (isEmpty()){
+        if (isEmpty()) {
             root = newNode;
             return;
         }
@@ -152,34 +163,38 @@ public class CourseTree implements CommonTreeInterface<Course> {
         TreeNode<Course> current = root;
         TreeNode<Course> parent = null;
 
-        while(current != null){
+        while (current != null) {
 
             parent = current;
 
-            if(value.getCcode().equals(current.data.getCcode())){
-                System.out.println("The course " + current.data + "is already in the list.");
+            if (value.getCcode().equals(current.data.getCcode())) {
+                if (display) {
+                    System.out.println("The course " + current.data + "is already in the list.");
+                }
                 return;
             }
 
-            if(value.getCcode().compareTo(current.data.getCcode()) < 0){
+            if (value.getCcode().compareTo(current.data.getCcode()) < 0) {
                 current = current.left;
             } else {
                 current = current.right;
             }
         }
 
-        if(value.getCcode().compareTo(parent.data.getCcode()) < 0){
+        if (value.getCcode().compareTo(parent.data.getCcode()) < 0) {
             parent.left = newNode;
-        } else{
+        } else {
             parent.right = newNode;
         }
 
-        System.out.println("Add course " + value.getCcode() + " successfully.");
+        if (display) {
+            System.out.println("Add course " + value.getCcode() + " successfully.");
+        }
     }
 
     @Override
     public void preOrder(TreeNode<Course> node) {
-        if(node == null){
+        if (node == null) {
             return;
         }
         display(node);
@@ -189,7 +204,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void inOrder(TreeNode<Course> node) {
-        if(node == null) {
+        if (node == null) {
             return;
         }
         inOrder(node.left);
@@ -199,7 +214,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void postOrder(TreeNode<Course> node) {
-        if(node == null) {
+        if (node == null) {
             return;
         }
         postOrder(node.left);
@@ -211,13 +226,13 @@ public class CourseTree implements CommonTreeInterface<Course> {
     public TreeNode<Course> get(Course value) {
         TreeNode<Course> current = root;
 
-        while(current != null){
+        while (current != null) {
 
-            if(value.getCcode().equals(current.data.getCcode())){
+            if (value.getCcode().equals(current.data.getCcode())) {
                 return current;
             }
 
-            if(value.getCcode().compareTo(current.data.getCcode()) < 0){
+            if (value.getCcode().compareTo(current.data.getCcode()) < 0) {
                 current = current.left;
             } else {
                 current = current.right;
@@ -230,12 +245,12 @@ public class CourseTree implements CommonTreeInterface<Course> {
     public TreeNode<Course> get(String code) {
         TreeNode<Course> current = root;
 
-        while(current != null){
-            if(code.equals(current.data.getCcode())){
+        while (current != null) {
+            if (code.equals(current.data.getCcode())) {
                 return current;
             }
 
-            if(code.compareTo(current.data.getCcode()) < 0){
+            if (code.compareTo(current.data.getCcode()) < 0) {
                 current = current.left;
             } else {
                 current = current.right;
@@ -272,44 +287,44 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void breadth() {
-        if(root == null){
+        if (root == null) {
             return;
         }
 
         CommonQueue<TreeNode<Course>> queue = new CommonQueue<>();
         queue.enqueue(root);
 
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             TreeNode<Course> current = queue.dequeue();
             display(current);
 
-            if(current.left != null){
+            if (current.left != null) {
                 queue.enqueue(current.left);
             }
 
-            if(current.right != null){
+            if (current.right != null) {
                 queue.enqueue(current.right);
             }
         }
     }
 
-    public TreeNode<Course> findMaxNode(TreeNode<Course> node){
-        while(node.right != null){
+    public TreeNode<Course> findMaxNode(TreeNode<Course> node) {
+        while (node.right != null) {
             node = node.right;
         }
         return node;
     }
 
 
-    public TreeNode<Course> findMinNode(TreeNode<Course> node){
-        while(node.left != null){
+    public TreeNode<Course> findMinNode(TreeNode<Course> node) {
+        while (node.left != null) {
             node = node.left;
         }
         return node;
     }
 
 
-    public TreeNode<Course> deleteByMergingRecursive(TreeNode<Course> node, Course value){
+    public TreeNode<Course> deleteByMergingRecursive(TreeNode<Course> node, Course value) {
         if (node == null) {
             return null;
         }
@@ -323,8 +338,8 @@ public class CourseTree implements CommonTreeInterface<Course> {
         } else {
             registerList.deleteRegistrationwithCourse(value.getCcode());  // Add Delete Registration with course
             // The value is found, we consider 3 possible ways
-            if(node.left == null) return node.right; //Tree has only one right child
-            if(node.right == null) return node.left; //Tree has only one left child
+            if (node.left == null) return node.right; //Tree has only one right child
+            if (node.right == null) return node.left; //Tree has only one left child
 
             /*
             Tree has both two child:
@@ -358,8 +373,8 @@ public class CourseTree implements CommonTreeInterface<Course> {
         } else {
             registerList.deleteRegistrationwithCourse(value.getCcode()); // Add Delete Registration with course
             // The value is found, we consider 3 possible ways
-            if(node.left == null) return node.right; //Tree has only one right child
-            if(node.right == null) return node.left; //Tree has only one left child
+            if (node.left == null) return node.right; //Tree has only one right child
+            if (node.right == null) return node.left; //Tree has only one left child
 
             /*
             Tree has both two child:
@@ -391,7 +406,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void toInOrderArray(ArrayList<Course> array, TreeNode<Course> start) {
-        if(start == null){
+        if (start == null) {
             return;
         }
         toInOrderArray(array, start.left);
@@ -401,24 +416,24 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     @Override
     public void balance(ArrayList<Course> data, int start, int end) {
-        if (start > end){
+        if (start > end) {
             return;
         }
         int mid = (start + end) / 2;
-        insert(data.get(mid));
+        insert(data.get(mid), false);
         balance(data, start, mid - 1);
         balance(data, mid + 1, end);
     }
 
     @Override
     public void balance() {
-        if (isEmpty()){
+        if (isEmpty()) {
             return;
         }
         ArrayList<Course> courseList = new ArrayList<>();
         toInOrderArray(courseList, root);
         clear();
-        balance(courseList, 0, courseList.size()-1);
+        balance(courseList, 0, courseList.size() - 1);
 
     }
 
@@ -455,13 +470,13 @@ public class CourseTree implements CommonTreeInterface<Course> {
         );
         System.out.println("----------------------------------------------------------------------------------------------------------------------");
 
-        if(mode == 1){
+        if (mode == DISPLAY_PREORDER) {
             preOrder(this.root);
-        } else if(mode == 2){
+        } else if (mode == DISPLAY_INORDER) {
             inOrder(this.root);
-        } else if(mode == 3){
+        } else if (mode == DISPLAY_POSTORDER) {
             postOrder(this.root);
-        } else if(mode == 4) {
+        } else if (mode == DISPLAY_BREADTH) {
             breadth();
         } else {
             System.out.println("Nhìn lại số đi Dũng chan");
@@ -471,10 +486,9 @@ public class CourseTree implements CommonTreeInterface<Course> {
     }
 
 
-
     @Override
-    public TreeNode<Course> searchByCode(String code){
-        if(isEmpty()){
+    public TreeNode<Course> searchByCode(String code) {
+        if (isEmpty()) {
             return null;
         }
 
@@ -482,25 +496,25 @@ public class CourseTree implements CommonTreeInterface<Course> {
         tempCourse.setCcode(code);
         TreeNode<Course> foundCourse = get(tempCourse);
 
-        if(foundCourse != null){
+        if (foundCourse != null) {
             System.out.println("Course Found: " + foundCourse.data);
             StudentTree findRegisterStudent = registerList.findRegisterStudentByCourse(code);
-            if (findRegisterStudent != null){
+            if (findRegisterStudent != null) {
                 System.out.println("Students register this course: ");
                 findRegisterStudent.displayStudents(4);
-            } else{
+            } else {
                 System.out.println("Course has no student.");
             }
             return foundCourse;
-        } else{
+        } else {
             System.out.println("Course not found.");
             return null;
         }
     }
 
     @Override
-    public CourseTree searchByName(String name){
-        if(isEmpty()){
+    public CourseTree searchByName(String name) {
+        if (isEmpty()) {
             return null;
         }
 
@@ -508,12 +522,12 @@ public class CourseTree implements CommonTreeInterface<Course> {
         CommonQueue<TreeNode<Course>> queue = new CommonQueue<>();
         queue.enqueue(root);
 
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
 
             TreeNode<Course> current = queue.dequeue();
 
-            if(current.data.getSname().contains(name)){
-                newTree.insert(current.data);
+            if (current.data.getSname().contains(name)) {
+                newTree.insert(current.data, false);
             }
 
             if (current.left != null) {
@@ -550,21 +564,21 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     private int isBalanced(TreeNode<Course> node) {
         if (node == null) {
-            return 0; 
+            return 0;
         }
 
         int leftHeight = isBalanced(node.left);
         if (leftHeight == -1) {
-            return -1; 
+            return -1;
         }
 
         int rightHeight = isBalanced(node.right);
         if (rightHeight == -1) {
-            return -1; 
+            return -1;
         }
 
         if (Math.abs(leftHeight - rightHeight) > 1) {
-            return -1; 
+            return -1;
         }
 
         return Math.max(leftHeight, rightHeight) + 1;

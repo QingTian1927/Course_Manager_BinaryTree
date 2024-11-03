@@ -4,9 +4,11 @@ import org.example.model.binaryTree.CommonTreeInterface;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonQueue;
 import org.example.model.linkedList.ListNode;
+import org.example.util.Validation;
 import sun.reflect.generics.tree.Tree;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -40,6 +42,27 @@ public class StudentTree implements CommonTreeInterface<Student> {
     @Override
     public boolean isEmpty() {
         return this.root == null;
+    }
+
+    public Student getStudentDetailsFromUser() {
+        System.out.println("Please enter the following student details:");
+        System.out.print("Enter student code: ");
+        String scode = Validation.getString().toUpperCase();
+        if (searchByCode(scode) != null) {
+            System.out.println("This student has been registered");
+            return null;
+        }
+        System.out.print("Enter student name: ");
+        String name = Validation.getString();
+
+        int now = LocalDate.now().getYear();
+        int byear = Validation.getInteger(
+                "Enter student birth year: ",
+                "Birth year must be between 1900 and " + now,
+                1900, now
+        );
+
+        return new Student(scode, name, byear);
     }
 
     @Override
@@ -407,7 +430,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
     @Override
     public StudentTree searchByName(String name) {
         StudentTree foundStudent = new StudentTree();
-        CommonQueue<TreeNode<Student>> queue = new CommonQueue<TreeNode<Student>>();
+        CommonQueue<TreeNode<Student>> queue = new CommonQueue<>();
         queue.enqueue(root);
         TreeNode<Student> cur;
         while(!queue.isEmpty()){
@@ -532,7 +555,6 @@ public class StudentTree implements CommonTreeInterface<Student> {
                     System.out.println("Invalid data format: " + line);
                 }
             }
-            System.out.println("Successfully loaded the student list from the file.");
         } catch (IOException e) {
             System.out.println("[FATAL] Failed to read students.txt");
             e.printStackTrace();
