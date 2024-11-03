@@ -3,6 +3,8 @@ package org.example.model.types;
 import org.example.model.binaryTree.CommonTreeInterface;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonQueue;
+import org.example.model.linkedList.ListNode;
+import sun.reflect.generics.tree.Tree;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,15 +14,18 @@ public class StudentTree implements CommonTreeInterface<Student> {
 
     private TreeNode<Student> root;
     private final RegisterList registerList;
+    private final CourseTree courseTree;
 
-    public StudentTree(RegisterList registerList) {
+    public StudentTree(RegisterList registerList, CourseTree courseTree) {
         this.root = null;
         this.registerList = registerList;
+        this.courseTree = courseTree;
     }
 
     public StudentTree() {
         root = null;
         registerList = new RegisterList();
+        courseTree = new CourseTree();
     }
 
     public TreeNode<Student> getRoot() {
@@ -372,6 +377,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
         }else{
             parentReplaceNode.right = replaceNode.left;;
         }
+        resetRegister(x.getScode());
     }
 
     @Override
@@ -563,5 +569,29 @@ public class StudentTree implements CommonTreeInterface<Student> {
         StringBuilder s = new StringBuilder();
         postOrderString(root, s);
         return s.toString();
+    }
+//                    if(q.data.getCcode().equals(p.data.getCcode())){
+//                        q.data.setRegistered(q.data.getRegistered()-1);
+//                    }
+    public void resetRegister(String scode){
+        for(ListNode<Register> p = registerList.getByIndex(0); p != null; p = p.next){
+            if(p.data.getScode().equals(scode)){
+                CommonQueue<TreeNode<Course>> q = new CommonQueue<TreeNode<Course>>();
+                q.enqueue(courseTree.getRoot());
+                TreeNode<Course> r;
+                while (!q.isEmpty()) {
+                    r = q.dequeue();
+                    if(r.data.getCcode().equals(p.data.getCcode())){
+                        r.data.setRegistered(r.data.getRegistered()-1);
+                    }
+                    if (r.left != null) {
+                        q.enqueue(r.left);
+                    }
+                    if (r.right != null) {
+                        q.enqueue(r.right);
+                    }
+                }
+            }
+        }
     }
 }
