@@ -535,7 +535,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
             System.out.println("Nhìn lại số đi Dũng chan");
         }
 
-        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------");
     }
 
     @Override
