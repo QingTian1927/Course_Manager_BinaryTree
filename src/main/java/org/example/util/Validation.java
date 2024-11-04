@@ -3,7 +3,7 @@ package org.example.util;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-public final class Validation {
+public final class  Validation {
     private Validation() {
     }
 
