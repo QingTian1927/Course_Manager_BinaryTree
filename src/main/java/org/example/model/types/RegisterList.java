@@ -4,6 +4,7 @@ import org.example.io.DataParser;
 import org.example.model.binaryTree.TreeNode;
 import org.example.model.linkedList.CommonList;
 import org.example.model.linkedList.ListNode;
+import org.example.util.Formatter;
 import org.example.util.Validation;
 
 import java.io.File;
@@ -147,7 +148,7 @@ public class RegisterList extends CommonList<Register> {
         LocalDate bdate = null;
         while (bdate == null) {
             System.out.print("Enter registration date (YYYY-MM-DD): ");
-            String dateInput = Validation.getString();
+            String dateInput = Formatter.normalizeDate(Validation.getString());
             try {
                 bdate = LocalDate.parse(dateInput, DateTimeFormatter.ISO_LOCAL_DATE);
             } catch (Exception e) {

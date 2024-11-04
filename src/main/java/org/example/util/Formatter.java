@@ -1,5 +1,7 @@
 package org.example.util;
 
+import com.sun.javafx.binding.StringFormatter;
+
 public class Formatter {
     public static String normalizeId(String s){
         StringBuilder newStr = new StringBuilder();
@@ -19,5 +21,22 @@ public class Formatter {
             newStr.append(w.substring(1).toLowerCase() + " ");
         }
         return newStr.toString().trim();
+    }
+
+    public static String normalizeDate(String s){
+        String[] part = s.split("[/\\\\-]");
+        if(part.length == 3 ){
+            String year = part[0].trim();
+            String month = part[1].trim();
+            String day = part[2].trim();
+            StringBuilder date = new StringBuilder();
+            date.append(year);
+            date.append("-");
+            date.append(String.format("%02d", Integer.parseInt(month)));
+            date.append("-");
+            date.append(String.format("%02d", Integer.parseInt(day)));
+            return date.toString();
+        }
+        return "";
     }
 }
