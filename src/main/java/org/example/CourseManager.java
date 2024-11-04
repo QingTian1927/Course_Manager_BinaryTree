@@ -65,6 +65,7 @@ public class CourseManager {
             String choice = Validation.getString();
             System.out.println();
 
+            String temp;
             switch (choice) {
                 case "1":
                     courseTree.insert(courseTree.getCourseDetailsFromUser());
@@ -88,14 +89,28 @@ public class CourseManager {
                     pressEnter();
                     break;
                 case "5":
-                    System.out.print("Delete by code: ");
-                    courseTree.deleteByCopying(courseTree.get(Validation.getString()).data);
-                    pressEnter();
+                    System.out.print("Delete code by copying: ");
+                    TreeNode<Course> copyingDeleteNode = courseTree.get(Validation.getString().toUpperCase());
+                    if (copyingDeleteNode == null) {
+                        System.out.println("\nCourse not found.");
+                    } else {
+                        courseTree.deleteByCopying(copyingDeleteNode.data);
+                        System.out.println("Course Tree after node deletion:\n");
+                        courseTree.displayCourses(CourseTree.DISPLAY_BREADTH);
+                        pressEnter();
+                    }
                     break;
                 case "6":
-                    System.out.print("Delete by code: ");
-                    courseTree.deleteByMerging(courseTree.get(Validation.getString()).data);
-                    pressEnter();
+                    System.out.print("Delete code by merging: ");
+                    TreeNode<Course> mergingDeleteNode = courseTree.get(Validation.getString().toUpperCase());
+                    if (mergingDeleteNode == null) {
+                        System.out.println("\nCourse not found.");
+                    } else {
+                        courseTree.deleteByMerging(mergingDeleteNode.data);
+                        System.out.println("Course Tree after node deletion:\n");
+                        courseTree.displayCourses(CourseTree.DISPLAY_BREADTH);
+                        pressEnter();
+                    }
                     break;
                 case "7":
                     System.out.println("Tree before re-balancing:\n");
@@ -161,7 +176,14 @@ public class CourseManager {
                     break;
                 case "5":
                     System.out.print("Delete by code: ");
-                    studentTree.deleteByCopying(studentTree.get(Validation.getString()).data);
+                    TreeNode<Student> deleteNode = studentTree.get(Validation.getString());
+                    if (deleteNode == null) {
+                        System.out.println("\nStudent not found.");
+                    } else {
+                        studentTree.deleteByCopying(deleteNode.data);
+                        System.out.println("Student tree after deletion:\n");
+                        studentTree.breadth();
+                    }
                     break;
                 case "6":
                     System.out.print("Search by name: ");
