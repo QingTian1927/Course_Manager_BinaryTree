@@ -75,7 +75,7 @@ public class RegisterList extends CommonList<Register> {
         for (ListNode<Register> p = head; p != null; p = p.next) {
             if (p.data.getScode().equals(scode)) {
                 registerCourse.insert(
-                  courseTree.searchByCode2(p.data.getCcode()).data
+                  courseTree.get(p.data.getCcode()).data
                 );
             }
         }

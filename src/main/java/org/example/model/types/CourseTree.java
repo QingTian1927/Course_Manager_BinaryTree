@@ -99,7 +99,8 @@ public class CourseTree implements CommonTreeInterface<Course> {
 
     public Course getCourseDetailsFromUser() {
         System.out.println("Please enter the following course details:");
-        String ccode = "";
+        String ccode;
+
         do {
             System.out.print("Enter course code: ");
             ccode = Validation.getString().toUpperCase();

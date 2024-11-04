@@ -195,7 +195,7 @@ public class CourseManager {
                     break;
                 case "7":
                     System.out.print("Search registered courses by scode: ");
-                    CourseTree foundCourses = studentTree.findRegisterCourse(Validation.getString());
+                    CourseTree foundCourses = studentTree.findRegisterCourse(Validation.getString().toUpperCase());
                     System.out.println("Search result: ");
                     foundCourses.displayCourses(CourseTree.DISPLAY_BREADTH);
                     break;
