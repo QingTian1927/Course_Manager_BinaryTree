@@ -114,7 +114,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
             return;
         }
         inOrder(node.left);
-        System.out.println(node.data.toDataString());
+        displayForm(node);
         inOrder(node.right);
     }
 
@@ -127,6 +127,15 @@ public class StudentTree implements CommonTreeInterface<Student> {
         postOrder(node.right);
         System.out.println(node.data.toDataString());
     }
+    private void displayHeader() {
+        System.out.println("-----------------------------------------------------------");
+        System.out.printf("%-10s | %-15s | %-10s\n", "Student Code", "StudentName", "Year Of Birth");
+        System.out.println("-----------------------------------------------------------");
+    }
+
+    private void displayFooter() {
+        System.out.println("-----------------------------------------------------------");
+    }
 
     @Override
     public void breadth() {
@@ -136,9 +145,10 @@ public class StudentTree implements CommonTreeInterface<Student> {
         CommonQueue<TreeNode<Student>> queue = new CommonQueue<TreeNode<Student>>();
         queue.enqueue(root);
         TreeNode<Student> cur;
+        displayHeader();
         while(!queue.isEmpty()){
             cur = queue.dequeue();
-            display(cur);
+            displayForm(cur);
             if(cur.left != null){
                 queue.enqueue(cur.left);
             }
@@ -146,8 +156,57 @@ public class StudentTree implements CommonTreeInterface<Student> {
                 queue.enqueue(cur.right);
             }
         }
+        displayFooter();
     }
 
+    public void displayStudentsFound(TreeNode<Student> node) {
+        if (this.root == null) {
+            System.out.println("No Student yet");
+            return;
+        }
+
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-10s | %-15s | %-10s\n",
+                "Student Code", "StudentName", "Year Of Birth"
+        );
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+
+        displayForm(node);
+
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+    }
+
+    public void displayForm(TreeNode<Student> node) {
+        if (node == null) {
+            return;
+        }
+
+        System.out.printf(
+                "%-10s   | %-15s | %-12d\n",
+                node.data.getScode(),
+                node.data.getName(),
+                node.data.getByear()
+        );
+    }
+
+    public void displayStudents() {
+        if (this.root == null) {
+            System.out.println("No Student yet");
+            return;
+        }
+
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-10s | %-15s | %-10s\n",
+                "Student Code", "StudentName", "Year Of Birth"
+        );
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+
+        inOrder(this.root);
+
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+    }
 
     @Override
     public TreeNode<Student> get(Student value) {
