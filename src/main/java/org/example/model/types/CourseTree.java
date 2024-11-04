@@ -101,10 +101,14 @@ public class CourseTree implements CommonTreeInterface<Course> {
         System.out.println("Please enter the following course details:");
         System.out.print("Enter course code: ");
         String ccode = Validation.getString().toUpperCase();
-        if (searchByCode(ccode) != null) {
-            System.out.println("this course has been registered");
-            return null;
-        }
+        do {
+            System.out.print("Enter course code: ");
+            ccode = Validation.getString().toUpperCase();
+
+            if (!isCourseCodeAvailable(ccode)) {
+                System.out.println("This course has been registered. Please enter a different course code.");
+            }
+        } while (!isCourseCodeAvailable(ccode));
         System.out.print("Enter course short code: ");
         String scode = Validation.getString();
 
@@ -190,6 +194,27 @@ public class CourseTree implements CommonTreeInterface<Course> {
         if (display) {
             System.out.println("Add course " + value.getCcode() + " successfully.");
         }
+    }
+
+    public boolean isCourseCodeAvailable(String Ccode) {
+        return searchByCodeForInput(Ccode) == null;
+    }
+
+    public Course searchByCodeForInput(String code) {
+        TreeNode<Course> current = root;
+
+        while (current != null) {
+            if (code.equals(current.data.getCcode())) {
+                return current.data;
+            }
+
+            if (code.compareTo(current.data.getCcode()) < 0) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        return null;
     }
 
     @Override
