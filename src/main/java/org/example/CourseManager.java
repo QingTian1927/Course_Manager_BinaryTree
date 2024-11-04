@@ -101,6 +101,7 @@ public class CourseManager {
                     System.out.println("Tree before re-balancing:\n");
                     courseTree.displayCourses(CourseTree.DISPLAY_BREADTH);
                     courseTree.balance();
+                    System.out.println("\n");
                     System.out.println("Tree after re-balancing:\n");
                     courseTree.displayCourses(CourseTree.DISPLAY_BREADTH);
                     pressEnter();
@@ -148,7 +149,8 @@ public class CourseManager {
                     pressEnter();
                     break;
                 case "2":
-                    studentTree.inOrder(studentTree.getRoot());
+//                    studentTree.inOrder(studentTree.getRoot());
+                    studentTree.displayStudents();
                     break;
                 case "3":
                     studentTree.save(new File(STUDENT_SAVE_FILE));
@@ -157,7 +159,7 @@ public class CourseManager {
                     System.out.print("Search by code: ");
                     TreeNode<Student> result = studentTree.searchByCode(Validation.getString());
                     System.out.println("Search result:\n");
-                    System.out.println(result);
+                    studentTree.displayStudentsFound(result);
                     break;
                 case "5":
                     System.out.print("Delete by code: ");
