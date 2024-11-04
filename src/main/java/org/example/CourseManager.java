@@ -140,7 +140,7 @@ public class CourseManager {
                     break;
                 case "11":
                     System.out.print("Search by code: ");
-                    courseTree.searchByCode(Validation.getString());
+                    courseTree.searchByCode(Validation.getString().toUpperCase());
                     pressEnter();
                     break;
                 case "0":

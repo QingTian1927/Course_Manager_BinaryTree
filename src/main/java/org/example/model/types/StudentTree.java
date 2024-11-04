@@ -128,13 +128,13 @@ public class StudentTree implements CommonTreeInterface<Student> {
         System.out.println(node.data.toDataString());
     }
     private void displayHeader() {
-        System.out.println("-----------------------------------------------------------");
-        System.out.printf("%-10s | %-15s | %-10s\n", "Student Code", "StudentName", "Year Of Birth");
-        System.out.println("-----------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-10s | %-40s | %-10s\n", "Student Code", "StudentName", "Year Of Birth");
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
     }
 
     private void displayFooter() {
-        System.out.println("-----------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------");
     }
 
     @Override
@@ -142,10 +142,11 @@ public class StudentTree implements CommonTreeInterface<Student> {
         if(isEmpty()){
             return;
         }
-        CommonQueue<TreeNode<Student>> queue = new CommonQueue<TreeNode<Student>>();
+
+        CommonQueue<TreeNode<Student>> queue = new CommonQueue<>();
         queue.enqueue(root);
         TreeNode<Student> cur;
-        displayHeader();
+
         while(!queue.isEmpty()){
             cur = queue.dequeue();
             displayForm(cur);
@@ -167,7 +168,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
 
         System.out.println("----------------------------------------------------------------------------------------------------------------------");
         System.out.printf(
-                "%-10s | %-15s | %-10s\n",
+                "%-10s | %-40s | %-10s\n",
                 "Student Code", "StudentName", "Year Of Birth"
         );
         System.out.println("----------------------------------------------------------------------------------------------------------------------");
@@ -183,7 +184,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
         }
 
         System.out.printf(
-                "%-10s   | %-15s | %-12d\n",
+                "%-15s | %-40s | %-12d\n",
                 node.data.getScode(),
                 node.data.getName(),
                 node.data.getByear()
@@ -198,7 +199,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
 
         System.out.println("----------------------------------------------------------------------------------------------------------------------");
         System.out.printf(
-                "%-10s | %-15s | %-10s\n",
+                "%-15s | %-40s | %-10s\n",
                 "Student Code", "StudentName", "Year Of Birth"
         );
         System.out.println("----------------------------------------------------------------------------------------------------------------------");
@@ -592,8 +593,6 @@ public class StudentTree implements CommonTreeInterface<Student> {
         } else {
             System.out.println("Nhìn lại số đi Dũng chan");
         }
-
-        System.out.println("---------------------------------------------------------------------------------");
     }
 
     @Override
