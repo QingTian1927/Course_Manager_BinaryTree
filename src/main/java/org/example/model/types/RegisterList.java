@@ -123,11 +123,27 @@ public class RegisterList extends CommonList<Register> {
     public Register getRegisterDetailsFromUser() {
         System.out.println("Please enter the following registration details:");
 
-        System.out.print("Enter course code: ");
-        String ccode = Validation.getString().toUpperCase();
+        String ccode;
+        while (true) {
+            System.out.print("Enter course code: ");
+            ccode = Validation.getString().toUpperCase();
 
-        System.out.print("Enter student code: ");
-        String scode = Validation.getString();
+            if (courseTree.get(ccode) != null) {
+                break;
+            }
+            System.out.println("Course doesn't exist. Try again!");
+        }
+
+        String scode;
+        while (true) {
+            System.out.print("Enter student code: ");
+            scode = Validation.getString().toUpperCase();
+
+            if (studentTree.get(scode) != null) {
+                break;
+            }
+            System.out.println("Student doesn't exist. Try again!");
+        }
 
         LocalDate bdate = null;
         while (bdate == null) {

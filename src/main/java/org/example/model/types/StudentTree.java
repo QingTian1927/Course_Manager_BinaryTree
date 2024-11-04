@@ -48,7 +48,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
         System.out.println("Please enter the following student details:");
         System.out.print("Enter student code: ");
         String scode = Validation.getString().toUpperCase();
-        if (searchByCode(scode) != null) {
+        if (get(scode) != null) {
             System.out.println("This student has been registered");
             return null;
         }
