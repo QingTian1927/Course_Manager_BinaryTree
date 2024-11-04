@@ -329,12 +329,12 @@ public class CourseTree implements CommonTreeInterface<Course> {
             return null;
         }
 
-        if (value.getCcode().compareTo(root.data.getCcode()) < 0) {
+        if (value.getCcode().compareTo(node.data.getCcode()) < 0) {
             // The value to delete is less, search in the left subtree
-            root.left = deleteByMergingRecursive(root.left, value);
+            node.left = deleteByMergingRecursive(node.left, value);
         } else if (value.getCcode().compareTo(root.data.getCcode()) > 0) {
             // The value to delete is greater, search in the right subtree
-            root.right = deleteByMergingRecursive(root.right, value);
+            node.right = deleteByMergingRecursive(node.right, value);
         } else {
             registerList.deleteRegistrationwithCourse(value.getCcode());  // Add Delete Registration with course
             // The value is found, we consider 3 possible ways
@@ -364,12 +364,12 @@ public class CourseTree implements CommonTreeInterface<Course> {
             return null;
         }
 
-        if (value.getCcode().compareTo(root.data.getCcode()) < 0) {
+        if (value.getCcode().compareTo(node.data.getCcode()) < 0) {
             // The value to delete is less, search in the left subtree
-            root.left = deleteByMergingRecursive(root.left, value);
-        } else if (value.getCcode().compareTo(root.data.getCcode()) > 0) {
+            node.left = deleteByMergingRecursive(node.left, value);
+        } else if (value.getCcode().compareTo(node.data.getCcode()) > 0) {
             // The value to delete is greater, search in the right subtree
-            root.right = deleteByMergingRecursive(root.right, value);
+            node.right = deleteByMergingRecursive(node.right, value);
         } else {
             registerList.deleteRegistrationwithCourse(value.getCcode()); // Add Delete Registration with course
             // The value is found, we consider 3 possible ways
@@ -485,6 +485,11 @@ public class CourseTree implements CommonTreeInterface<Course> {
         System.out.println("----------------------------------------------------------------------------------------------------------------------");
     }
 
+    public CourseTree convertTreeNodeToDisplay(TreeNode<Course> node){
+        CourseTree newTree = new CourseTree();
+        newTree.insert(node.data, false);
+        return newTree;
+    }
 
     @Override
     public TreeNode<Course> searchByCode(String code) {
@@ -497,7 +502,10 @@ public class CourseTree implements CommonTreeInterface<Course> {
         TreeNode<Course> foundCourse = get(tempCourse);
 
         if (foundCourse != null) {
-            System.out.println("Course Found: " + foundCourse.data);
+            CourseTree convertNodeToDisplay = convertTreeNodeToDisplay(foundCourse);
+            System.out.println("Course Found: ");
+            convertNodeToDisplay.displayCourses(DISPLAY_BREADTH);
+            System.out.println();
             StudentTree findRegisterStudent = registerList.findRegisterStudentByCourse(code);
             if (findRegisterStudent != null) {
                 System.out.println("Students register this course: ");

@@ -82,8 +82,9 @@ public class CourseManager {
                 case "4":
                     System.out.print("Search by ccode: ");
                     TreeNode<Course> course = courseTree.get(Validation.getString());
+                    CourseTree courseToDisplay = courseTree.convertTreeNodeToDisplay(course);
                     System.out.println("Search result:\n");
-                    System.out.println(course);
+                    courseToDisplay.displayCourses(CourseTree.DISPLAY_BREADTH);
                     pressEnter();
                     break;
                 case "5":
@@ -116,7 +117,8 @@ public class CourseManager {
                 case "10":
                     System.out.print("Search by name: ");
                     CourseTree foundCourse = courseTree.searchByName(Validation.getString());
-                    System.out.println("Found courses:\n");
+                    System.out.println();
+                    System.out.println("Found courses: ");
                     foundCourse.displayCourses(CourseTree.DISPLAY_BREADTH);
                     pressEnter();
                     break;
