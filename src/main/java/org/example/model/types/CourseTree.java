@@ -100,6 +100,7 @@ public class CourseTree implements CommonTreeInterface<Course> {
     public Course getCourseDetailsFromUser() {
         System.out.println("Please enter the following course details:");
         String ccode;
+
         do {
             System.out.print("Enter course code: ");
             ccode = Validation.getString().toUpperCase();
@@ -513,6 +514,29 @@ public class CourseTree implements CommonTreeInterface<Course> {
         CourseTree newTree = new CourseTree();
         newTree.insert(node.data, false);
         return newTree;
+    }
+
+    public TreeNode<Course> searchByCode2(String code){
+        if(isEmpty()){
+            return null;
+        }
+        CommonQueue<TreeNode<Course>> queue = new CommonQueue<TreeNode<Course>>();
+        queue.enqueue(root);
+        TreeNode<Course> cur;
+        while(!queue.isEmpty()){
+            cur = queue.dequeue();
+            if(cur.data.getCcode().equalsIgnoreCase(code)){
+                return cur;
+            }
+            if(cur.left != null){
+                queue.enqueue(cur.left);
+            }
+            if(cur.right != null){
+                queue.enqueue(cur.right);
+            }
+        }
+        System.out.println("Course not found");
+        return null;
     }
 
     @Override
