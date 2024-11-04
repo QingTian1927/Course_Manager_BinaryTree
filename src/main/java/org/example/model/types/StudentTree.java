@@ -78,7 +78,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
 
         while (cur != null) {
             String currentStudent = cur.data.getScode();
-            if (currentStudent.equals(insertCode)) {
+            if (currentStudent.equalsIgnoreCase(insertCode)) {
                 System.out.println("Student code has existed");
                 return;
             }
@@ -214,7 +214,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
 
         while(current != null){
 
-            if(value.getScode().equals(current.data.getScode())){
+            if(value.getScode().equalsIgnoreCase(current.data.getScode())){
                 return current;
             }
 
@@ -232,7 +232,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
 
         while(current != null){
 
-            if(code.equals(current.data.getScode())){
+            if(code.equalsIgnoreCase(current.data.getScode())){
                 return current;
             }
 
@@ -274,7 +274,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
         TreeNode<Student> currParent = null;
 
         while (curr != null) {
-            if (curr.data.getScode().equals(x.getScode())) {
+            if (curr.data.getScode().equalsIgnoreCase(x.getScode())) {
                 break;
             }
 
@@ -372,12 +372,12 @@ public class StudentTree implements CommonTreeInterface<Student> {
         if (isEmpty()) {
             return;
         }
-
+        resetRegister(x.getScode());
         TreeNode<Student> curr = root;
         TreeNode<Student> currParent = null;
 
         while (curr != null) {
-            if (curr.data.getScode().equals(x.getScode())) {
+            if (curr.data.getScode().equalsIgnoreCase(x.getScode())) {
                 break;
             }
 
@@ -459,7 +459,6 @@ public class StudentTree implements CommonTreeInterface<Student> {
         }else{
             parentReplaceNode.right = replaceNode.left;;
         }
-        resetRegister(x.getScode());
     }
 
     @Override
@@ -472,7 +471,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
         TreeNode<Student> cur;
         while(!queue.isEmpty()){
             cur = queue.dequeue();
-            if(cur.data.getScode().equals(code)){
+            if(cur.data.getScode().equalsIgnoreCase(code)){
                 return cur;
             }
             if(cur.left != null){
@@ -620,8 +619,7 @@ public class StudentTree implements CommonTreeInterface<Student> {
             System.exit(1);
         }
     }
-//***************************************
-    //*********
+
     @Override
     public void save(File file) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
@@ -651,18 +649,16 @@ public class StudentTree implements CommonTreeInterface<Student> {
         postOrderString(root, s);
         return s.toString();
     }
-//                    if(q.data.getCcode().equals(p.data.getCcode())){
-//                        q.data.setRegistered(q.data.getRegistered()-1);
-//                    }
+
     public void resetRegister(String scode){
         for(ListNode<Register> p = registerList.getByIndex(0); p != null; p = p.next){
-            if(p.data.getScode().equals(scode)){
+            if(p.data.getScode().equalsIgnoreCase(scode)){
                 CommonQueue<TreeNode<Course>> q = new CommonQueue<TreeNode<Course>>();
                 q.enqueue(courseTree.getRoot());
                 TreeNode<Course> r;
                 while (!q.isEmpty()) {
                     r = q.dequeue();
-                    if(r.data.getCcode().equals(p.data.getCcode())){
+                    if(r.data.getCcode().equalsIgnoreCase(p.data.getCcode())){
                         r.data.setRegistered(r.data.getRegistered()-1);
                     }
                     if (r.left != null) {
@@ -673,6 +669,6 @@ public class StudentTree implements CommonTreeInterface<Student> {
                     }
                 }
             }
-        }
+        }registerList.deleteRegister(scode);
     }
 }
