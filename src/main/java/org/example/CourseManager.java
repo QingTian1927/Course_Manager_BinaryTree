@@ -161,10 +161,10 @@ public class CourseManager {
             switch (choice) {
                 case "1":
                     studentTree.insert(studentTree.getStudentDetailsFromUser());
+                    System.out.println("Successfully added new student");
                     pressEnter();
                     break;
                 case "2":
-//                    studentTree.inOrder(studentTree.getRoot());
                     studentTree.displayStudents();
                     break;
                 case "3":
